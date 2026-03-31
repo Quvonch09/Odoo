@@ -24,9 +24,9 @@ var/
 # Odoo specific
 *.log
 *.pid
-filestore/
-sessions/
-data/
+/filestore/
+/sessions/
+/data/
 odoo.conf
 !odoo.deploy.conf
 *.conf

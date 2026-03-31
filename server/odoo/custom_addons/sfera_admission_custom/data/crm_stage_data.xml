@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="stage_qualify" model="crm.stage">
+            <field name="name">Kval qilish</field>
+            <field name="sequence">10</field>
+            <field name="is_won">False</field>
+        </record>
+    </data>
+</odoo>
