@@ -26,7 +26,7 @@ class OpClassroom(models.Model):
     _description = "Classroom"
 
     name = fields.Char('Name', size=16, required=True)
-    code = fields.Char('Code', size=16, required=True)
+    code = fields.Char('Code', size=16)
     course_id = fields.Many2one('op.course', 'Course')
     batch_id = fields.Many2one('op.batch', 'Batch')
     capacity = fields.Integer(string='No of Seats', required=True)
@@ -36,8 +36,7 @@ class OpClassroom(models.Model):
                                  string='Asset')
     active = fields.Boolean(default=True)
 
-    _unique_classroom_code = models.Constraint('unique(code)',
-                                               'Code should be unique per classroom!')
+
     _capacity_check = models.Constraint('CHECK (capacity > 0)',
                                         'Integer field must be greater than  0')
 

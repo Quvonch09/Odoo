@@ -64,10 +64,25 @@ class CrmLead(models.Model):
         records = super(CrmLead, self).create(vals_list)
         
         for record in records:
-            if record.admission_id:
-                Model = self.env.get('op.application') or self.env.get('op.admission')
+            # Har doim Application yaratishga harakat qilamiz
+            record._auto_create_application()
+            
+        return records
+
+    def _auto_create_application(self):
+        """ Lead uchun Application (op.admission) yaratish """
+        for record in self:
+            register = record.admission_id
+            if not register and record.course_id:
+                # Kursga mos keluvchi ochiq registerni qidirish
+                register = self.env['op.admission.register'].sudo().search([
+                    ('course_id', '=', record.course_id.id),
+                    ('state', 'in', ['application', 'admission'])
+                ], limit=1)
+
+            if register:
+                Model = self.env.get('op.admission') or self.env.get('op.application')
                 if Model is not None:
-                    # Yoshni xavfsiz hisoblash (min 3 yosh)
                     safe_age = record.age if record.age >= 3 else 15
                     calc_date = date.today() - relativedelta(years=safe_age)
                     
@@ -75,21 +90,21 @@ class CrmLead(models.Model):
                         'name': f"{record.first_name} {record.last_name or ''}",
                         'first_name': record.first_name,
                         'last_name': record.last_name,
-                        'course_id': record.course_id.id if record.course_id else False,
-                        'register_id': record.admission_id.id,
+                        'course_id': record.course_id.id if record.course_id else register.course_id.id,
+                        'register_id': register.id,
                         'mobile': record.student_phone,
                         'street': record.address,
                         'gender': 'm',
                         'birth_date': calc_date,
-                        'fees_term_id': 3, # Tanlangan to'lov sharti IDsi
                     }
-
-                    if 'custom_fees' in Model._fields:
-                        price = record.admission_id.product_id.list_price if record.admission_id.product_id else 0.0
-                        app_vals['custom_fees'] = price
+                    
+                    # To'lov sharti (fees term)
+                    term = self.env['op.fees.terms'].sudo().search([], limit=1)
+                    if term:
+                        app_vals['fees_term_id'] = term.id
 
                     Model.sudo().create(app_vals)
-        return records
+                    _logger.debug("Application yaratildi: %s", record.name)
 
     def write(self, vals):
         """

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_op_faculty_form_inherit_sfera" model="ir.ui.view">
+        <field name="name">op.faculty.form.inherit.sfera</field>
+        <field name="model">op.faculty</field>
+        <field name="inherit_id" ref="openeducat_core.view_op_faculty_form"/>
+        <field name="arch" type="xml">
+            <!-- Millati (Nationality) maydonini yashirish -->
+            <xpath expr="//field[@name='nationality']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Tili (Language) maydoni - texnik nomi 'lang' -->
+            <xpath expr="//field[@name='lang']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Qon guruhi (Blood Group) maydonini yashirish -->
+            <xpath expr="//field[@name='blood_group']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

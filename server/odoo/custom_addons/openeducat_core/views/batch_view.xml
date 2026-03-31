@@ -7,9 +7,7 @@
             <field name="arch" type="xml">
                 <list string="Batch">
                     <field name="name"/>
-                    <field name="code"/>
                     <field name="start_date"/>
-                    <field name="end_date"/>
                     <field name="course_id"/>
                 </list>
             </field>
@@ -32,10 +30,7 @@
                                 <field name="start_date"/>
                                 <field name="course_id"/>
                             </group>
-                            <group>
-                                <field name="code"/>
-                                <field name="end_date"/>
-                            </group>
+
                         </group>
                     </sheet>
                     <chatter/>
@@ -49,10 +44,8 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <search string="Batch">
-                    <field name="code"/>
                     <field name="name"/>
                     <field name="start_date"/>
-                    <field name="end_date"/>
                     <field name="course_id"/>
                     <newline/>
                     <group>
@@ -79,7 +72,6 @@
                     <field name="name" type="row"/>
                     <field name="course_id"/>
                     <field name="start_date"/>
-                    <field name="end_date"/>
                 </pivot>
             </field>
         </record>

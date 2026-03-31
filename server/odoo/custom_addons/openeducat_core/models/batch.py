@@ -27,19 +27,18 @@ class OpBatch(models.Model):
     _inherit = "mail.thread"
     _description = "OpenEduCat Batch"
 
-    code = fields.Char('Code', size=16, required=True)
+    code = fields.Char('Code', size=16)
     name = fields.Char('Name', size=32, required=True)
     start_date = fields.Date(
         'Start Date', required=True, default=fields.Date.today())
-    end_date = fields.Date('End Date', required=True)
+    end_date = fields.Date('End Date')
     course_id = fields.Many2one('op.course', 'Course', required=True)
     active = fields.Boolean(default=True)
-    _unique_batch_code = models.Constraint('unique(code)',
-                                           'Code should be unique per batch!')
-
     @api.constrains('start_date', 'end_date')
     def check_dates(self):
         for record in self:
+            if not (record.start_date and record.end_date):
+                continue
             start_date = fields.Date.from_string(record.start_date)
             end_date = fields.Date.from_string(record.end_date)
             if start_date > end_date:

@@ -162,38 +162,7 @@
                                     </group>
                                 </group>
                             </page>
-                            <page name="personal_detail" string="Personal Detail">
-                                <group>
-                                    <group>
-                                        <field name="gender" required="1"/>
 
-                                        <field name="birth_date"
-                                               options="{'datepicker':{'warn_future': true}}"
-                                               readonly="state == 'done'"/>
-                                        <field name="family_income"
-                                               readonly="state == 'done'"/>
-                                        <field name="family_business"
-                                               readonly="state == 'done'"/>
-
-                                        <field name="nbr" invisible="1"/>
-                                    </group>
-                                    <group>
-                                        <label for="street" string="Address"/>
-                                        <div name="o_address_format">
-                                            <field name="street" placeholder="Street..."/>
-                                            <field name="street2" placeholder="Street2"/>
-                                            <div class="address_format d-md-flex">
-                                                <field name="city" placeholder="City" />
-                                                <field name="state_id" class="oe_no_button" placeholder="State"
-                                                         options="{&quot;no_open&quot;: True}"/>
-                                                <field name="zip" placeholder="ZIP" />
-                                            </div>
-                                            <field name="country_id" placeholder="Country" class="oe_no_button"
-                                                    options="{&quot;no_open&quot;: True}"/>
-                                        </div>
-                                    </group>
-                                </group>
-                            </page>
                         </notebook>
                     </sheet>
                     <chatter/>

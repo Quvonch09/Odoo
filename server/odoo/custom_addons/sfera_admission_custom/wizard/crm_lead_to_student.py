@@ -65,12 +65,18 @@ class CrmLeadToStudentWizard(models.TransientModel):
                 'name': lead.name,
                 'phone': lead.student_phone,
                 'street': lead.address,
+                'parent_name': lead.parent_name,
+                'parent_phone': lead.parent_phone,
                 'gender': 'm', 
                 'birth_date': fields.Date.today(),
             }
             
             student = self.env['op.student'].sudo().create(student_vals)
-            student.sudo().write({'batch_id': self.batch_id.id})
+            student.sudo().write({
+                'batch_id': self.batch_id.id,
+                'parent_name': lead.parent_name,
+                'parent_phone': lead.parent_phone,
+            })
 
             # ─── Ota-ona avtomatik yaratish ───
             if lead.parent_name:

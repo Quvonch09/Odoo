@@ -23,6 +23,7 @@
         'views/student_custom_view.xml',
         'views/crm_lead_view.xml',
         'views/lead_form_template.xml',
+        'views/faculty_view.xml',
     ],
     'installable': True,
     'application': False,

@@ -51,7 +51,7 @@ class OpAdmission(models.Model):
         'Application Date', required=True, copy=False,
         default=lambda self: fields.Datetime.now())
     birth_date = fields.Date(
-        'Birth Date', required=True)
+        'Birth Date')
     course_id = fields.Many2one(
         'op.course', 'Course', required=True)
     batch_id = fields.Many2one(
@@ -91,8 +91,7 @@ class OpAdmission(models.Model):
         'Family Income')
     gender = fields.Selection(
         [('m', 'Male'), ('f', 'Female')],
-        string='Gender',
-        required=True)
+        string='Gender')
     student_id = fields.Many2one(
         'op.student', 'Student')
     nbr = fields.Integer('No of Admission', readonly=True)
