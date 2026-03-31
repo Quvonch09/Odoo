@@ -72,39 +72,61 @@ class CrmLead(models.Model):
     def _auto_create_application(self):
         """ Lead uchun Application (op.admission) yaratish """
         for record in self:
+            # Allaqachon ariza bo'lsa, yangi yaratmaymiz
+            # (Misol uchun ismi va teli bir xil bo'lgan arizalarni qidirish)
+            existing_app = self.env['op.admission'].sudo().search([
+                ('first_name', '=', record.first_name),
+                ('mobile', '=', record.student_phone)
+            ], limit=1)
+            
+            if existing_app:
+                _logger.info("Bu Lead uchun allaqachon ariza (Application) mavjud: %s", existing_app.name)
+                continue
+
             register = record.admission_id
             if not register and record.course_id:
-                # Kursga mos keluvchi ochiq registerni qidirish
+                # AKTIV Registrator qidirish (Draft emas, Application/Admission holatidagilarni avval qidiramiz)
                 register = self.env['op.admission.register'].sudo().search([
                     ('course_id', '=', record.course_id.id),
                     ('state', 'in', ['application', 'admission'])
                 ], limit=1)
+                
+                # Agar hali ochilmagani bo'lsa ham (Draft), oxirgi chora sifatida qabul qilamiz
+                if not register:
+                    register = self.env['op.admission.register'].sudo().search([
+                        ('course_id', '=', record.course_id.id),
+                        ('state', '=', 'draft')
+                    ], limit=1)
 
             if register:
-                Model = self.env.get('op.admission') or self.env.get('op.application')
-                if Model is not None:
-                    safe_age = record.age if record.age >= 3 else 15
-                    calc_date = date.today() - relativedelta(years=safe_age)
-                    
-                    app_vals = {
-                        'name': f"{record.first_name} {record.last_name or ''}",
-                        'first_name': record.first_name,
-                        'last_name': record.last_name,
-                        'course_id': record.course_id.id if record.course_id else register.course_id.id,
-                        'register_id': register.id,
-                        'mobile': record.student_phone,
-                        'street': record.address,
-                        'gender': 'm',
-                        'birth_date': calc_date,
-                    }
-                    
-                    # To'lov sharti (fees term)
-                    term = self.env['op.fees.terms'].sudo().search([], limit=1)
-                    if term:
-                        app_vals['fees_term_id'] = term.id
+                Model = self.env['op.admission']
+                safe_age = record.age if record.age >= 3 else 15
+                calc_date = date.today() - relativedelta(years=safe_age)
+                
+                app_vals = {
+                    'name': f"{record.first_name} {record.last_name or ''}",
+                    'first_name': record.first_name,
+                    'last_name': record.last_name,
+                    'course_id': record.course_id.id if record.course_id else register.course_id.id,
+                    'register_id': register.id,
+                    'mobile': record.student_phone,
+                    'street': record.address or '',
+                    'gender': 'm',
+                    'birth_date': calc_date,
+                }
+                
+                # To'lov shartini standart qidirib olish
+                term = self.env['op.fees.terms'].sudo().search([], limit=1)
+                if term:
+                    app_vals['fees_term_id'] = term.id
 
-                    Model.sudo().create(app_vals)
-                    _logger.debug("Application yaratildi: %s", record.name)
+                try:
+                    new_app = Model.sudo().create(app_vals)
+                    _logger.info("CRM -> Admission: Ariza yaratildi! Register: %s, Qolgan joy: %s", register.name, register.max_count)
+                except Exception as e:
+                    _logger.error("Admission yaratishda kutilmagan xatolik: %s", str(e))
+            else:
+                 _logger.warning("Lead '%s' uchun mos keluvchi Admission Register topilmadi!", record.name)
 
     def write(self, vals):
         """
