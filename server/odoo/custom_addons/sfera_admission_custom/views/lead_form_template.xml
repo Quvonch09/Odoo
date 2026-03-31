@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="leads_form_page" name="Instagram Lead Form">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6">
+                            <div class="card shadow-lg border-0 rounded-4">
+                                <div class="card-body p-5">
+                                    <div class="text-center mb-4">
+                                        <h2 class="fw-bold text-primary">Sfera Academy</h2>
+                                        <p class="text-muted">Ma'lumotlaringizni qoldiring, biz sizga qo'ng'iroq qilamiz!</p>
+                                    </div>
+                                    
+                                    <form action="/lead/submit" method="post">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="lead_source" value="instagram"/>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Ismingiz <span class="text-danger">*</span></label>
+                                            <input type="text" name="first_name" class="form-control form-control-lg border-2" placeholder="Ali" required="1"/>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold">Familiyangiz</label>
+                                            <input type="text" name="last_name" class="form-control form-control-lg border-2" placeholder="Valiyev"/>
+                                        </div>
+                                        
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold">Telefon raqamingiz <span class="text-danger">*</span></label>
+                                            <input type="tel" name="student_phone" class="form-control form-control-lg border-2" placeholder="+998 90 123 45 67" required="1"/>
+                                        </div>
+                                        
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary btn-lg rounded-pill py-3 fw-bold shadow-sm">
+                                                Yuborish <i class="fa fa-paper-plane ms-2"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="leads_thanks_page" name="Thanks Page">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container py-5 text-center">
+                    <div class="display-1 text-success mb-4">
+                        <i class="fa fa-check-circle"></i>
+                    </div>
+                    <h1 class="fw-bold">Rahmat!</h1>
+                    <p class="lead text-muted">Ma'lumotlaringiz muvaffaqiyatli yuborildi. Siz bilan tez orada bog'lanamiz!</p>
+                    <a href="/" class="btn btn-outline-primary btn-lg rounded-pill mt-4">Asosiy sahifa</a>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="attendance_page_template" name="Session Attendance">
+    <t t-call="website.layout">
+        <div class="container mt-4">
+            <h3>Attendance: <t t-esc="session.name"/></h3>
+            <p class="text-muted"><t t-esc="session.course_id.name"/> - <t t-esc="session.batch_id.name"/></p>
+            
+            <form action="/teacher/attendance/submit" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="session_id" t-att-value="session.id"/>
+                
+                <table class="table mt-3">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="students" t-as="student">
+                            <tr>
+                                <td><t t-esc="student.name"/></td>
+                                <td>
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label class="btn btn-outline-success active">
+                                            <input type="radio" t-attf-name="status_#{student.id}" value="present" checked="checked"/> Present
+                                        </label>
+                                        <label class="btn btn-outline-danger">
+                                            <input type="radio" t-attf-name="status_#{student.id}" value="absent"/> Absent
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary btn-lg">Submit Attendance</button>
+            </form>
+        </div>
+    </t>
+</template>
+</odoo>

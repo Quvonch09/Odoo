@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_op_batch_form_inherit_custom" model="ir.ui.view">
+        <field name="name">op.batch.form.inherit.custom</field>
+        <field name="model">op.batch</field>
+        <field name="inherit_id" ref="openeducat_core.view_op_batch_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//header" position="inside">
+                <button name="generate_timetable_button" 
+                        string="Jadvalni shakllantirish" 
+                        type="object" 
+                        class="oe_highlight" 
+                        confirm="Ushbu muddatgacha dars jadvali yaratilsinmi?"/>
+            </xpath>
+            
+            <xpath expr="//sheet//group[1]" position="after">
+                <group string="Avtomatik dars jadvali sozlamalari">
+                    <group>
+                        <field name="faculty_id"/>
+                        <field name="classroom_id"/> <field name="day_type"/>
+                        <field name="course_end_date"/>
+                    </group>
+                    <group>
+                        <field name="start_time" widget="float_time"/>
+                        <field name="end_time" widget="float_time"/>
+                    </group>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

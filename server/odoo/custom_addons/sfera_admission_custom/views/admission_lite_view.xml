@@ -1,0 +1,76 @@
+<odoo>
+    <record id="view_op_admission_register_form_inherited" model="ir.ui.view">
+        <field name="name">op.admission.register.form.inherited</field>
+        <field name="model">op.admission.register</field>
+        <field name="inherit_id" ref="openeducat_admission.view_op_admission_register_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="replace">
+                <header>
+                    <button name="action_quick_confirm" string="Confirm" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_create_new_lead" string="Yangi Ariza" type="object" class="oe_highlight" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,application,admission"/>
+                </header>
+            </xpath>
+
+            <xpath expr="//field[@name='product_id']" position="replace">
+                <field name="course_fees_amount"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='min_count']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='start_date']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='end_date']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//notebook" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        </field>
+    </record>
+
+    <record id="view_op_admission_form_lite" model="ir.ui.view">
+        <field name="name">op.admission.form.lite</field>
+        <field name="model">op.admission</field>
+        <field name="inherit_id" ref="openeducat_admission.view_op_admission_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='batch_id']" position="attributes"><attribute name="invisible">1</attribute><attribute name="required">0</attribute></xpath>
+            
+            <xpath expr="//sheet" position="before">
+                <style>
+                    .oe_title .fa-phone, .oe_title .fa-envelope, .oe_title .o_field_phone, .oe_title .o_field_email { display: none !important; }
+                </style>
+            </xpath>
+
+            <xpath expr="//notebook" position="before">
+                <group string="QUICK LEAD ENTRY">
+                    <group>
+                        <field name="birth_date" string="Age"/>
+                        <field name="gender"/>
+                        <!-- <field name="fees" string="To'lov miqdori" readonly="0" force_save="1"/> -->
+                    </group>
+                    <group>
+                        <field name="phone" required="1"/>
+                        <field name="street" string="Manzil"/>
+                    </group>
+                </group>
+            </xpath>
+
+            <xpath expr="//div[hasclass('oe_title')]//field[@name='phone']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//notebook/page[2]" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        </field>
+    </record>
+
+    <record id="view_op_admission_form_inherited_fees_final" model="ir.ui.view">
+    <field name="name">op.admission.form.fees.final</field>
+    <field name="model">op.admission</field>
+    <field name="inherit_id" ref="openeducat_admission.view_op_admission_form"/>
+    <field name="arch" type="xml">
+        
+        <xpath expr="//field[@name='fees']" position="attributes">
+            <attribute name="readonly">0</attribute>
+            <attribute name="force_save">1</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='fees']" position="after">
+            <field name="custom_fees" force_save="1"/>
+        </xpath>
+
+    </field>
+</record>
+</odoo>

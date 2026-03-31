@@ -1,0 +1,31 @@
+<odoo>
+<record id="view_op_student_form_sfera_custom_v_final" model="ir.ui.view">
+    <field name="name">op.student.form.sfera.custom.v.final</field>
+    <field name="model">op.student</field>
+    <field name="inherit_id" ref="openeducat_core.view_op_student_form"/>
+    <field name="arch" type="xml">
+
+        <xpath expr="//group/group[2]" position="inside">
+            <field name="parent_name"/>
+            <field name="parent_phone" widget="phone"/>
+        </xpath>
+
+        <xpath expr="//page[@name='other_information']" position="replace">
+            <page string="Markaz Izohi" name="markaz_izohi">
+                <group>
+                    <field name="comment" placeholder="Talaba haqida qo'shimcha izohlar..." nolabel="1"/>
+                </group>
+            </page>
+        </xpath>
+
+        <xpath expr="//field[@name='lang']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        <xpath expr="//field[@name='blood_group']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        <xpath expr="//field[@name='nationality']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        <xpath expr="//field[@name='visa_info']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        <xpath expr="//field[@name='category_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        <xpath expr="//field[@name='user_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        <xpath expr="//field[@name='partner_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+
+    </field>
+</record>
+</odoo>

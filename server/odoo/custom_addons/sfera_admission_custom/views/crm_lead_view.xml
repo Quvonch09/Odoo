@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="crm.crm_lead_action_pipeline" model="ir.actions.act_window">
+        <field name="view_mode">form,kanban,list,calendar,pivot,graph,activity</field>
+    </record>
+
+    <record id="crm_lead_view_form_sfera_restored" model="ir.ui.view">
+        <field name="name">crm.lead.form.sfera.restored</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(sfera_admission_custom.action_crm_lead_to_student_wizard)d" 
+                        string="Guruhga qo'shish" 
+                        type="action" 
+                        class="oe_highlight" 
+                        context="{'default_lead_id': id}"
+                        invisible="type == 'lead' or student_id != False"/>
+            </xpath>
+            
+            <xpath expr="//h1/field[@name='name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//h1" position="inside">
+                <div class="o_row d-flex">
+                    <field name="first_name" placeholder="Ism" class="oe_inline fw-bold text-primary" required="1"/>
+                    <span class="mx-2"> </span>
+                    <field name="last_name" placeholder="Familiya" class="oe_inline fw-bold text-primary"/>
+                </div>
+            </xpath>
+
+
+
+            <xpath expr="//group[@name='opportunity_partner']" position="replace">
+                <div class="row mt-3">
+                    <div class="col-md-6 border-end">
+                        <group string="TALABA MA'LUMOTLARI">
+                            <field name="age" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                            <field name="course_id" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                            <field name="admission_id" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                            <field name="lead_source" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                            <field name="batch_id" readonly="1" invisible="not batch_id"/>
+                            <field name="student_id" readonly="1" invisible="not student_id"/>
+                        </group>
+                    </div>
+                    <div class="col-md-6">
+                        <group string="ALOQA VA MANZIL">
+                            <field name="student_phone" widget="phone" string="Asosiy telefon"/>
+                            <field name="parent_name" string="Vasiy ismi" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                            <field name="parent_phone" widget="phone" string="Vasiy telefoni" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                            <field name="address" string="Yashash manzili" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        </group>
+                    </div>
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='team_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='date_deadline']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='priority']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='expected_revenue']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='probability']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+        </field>
+    </record>
+
+    <record id="crm_case_kanban_view_leads_inherit_sfera" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.inherit.sfera</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="quick_create">false</attribute>
+            </xpath>
+
+            <xpath expr="//kanban" position="inside">
+                <header>
+                    <button name="%(sfera_admission_custom.action_crm_lead_to_student_wizard)d" 
+                            string="Guruhga qo'shish (Ommaviy)" 
+                            type="action" 
+                            class="btn-primary" />
+                </header>
+            </xpath>
+
+            <!-- Kanban ichiga kerakli fieldlarni qo'shib qo'yamiz (declarations) -->
+            <xpath expr="//field[@name='won_status']" position="after">
+                <field name="course_id"/>
+                <field name="lead_count_compute"/>
+            </xpath>
+
+            <!-- Progressbar'da sonini ko'rsatish -->
+            <xpath expr="//progressbar" position="attributes">
+                <attribute name="sum_field">lead_count_compute</attribute>
+            </xpath>
+
+            <!-- Cardda kurs nomini ko'k badge ichida ko'rsatamiz -->
+            <xpath expr="//t[@t-name='card']/field[@name='name']" position="after">
+                <div t-if="record.course_id" class="mt-1 mb-1">
+                    <span class="badge rounded-pill text-bg-primary">
+                        <i class="fa fa-graduation-cap me-1"/>
+                        <field name="course_id"/>
+                    </span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

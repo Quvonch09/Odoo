@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_crm_lead_to_student_wizard_form" model="ir.ui.view">
+        <field name="name">crm.lead.to.student.wizard.form</field>
+        <field name="model">crm.lead.to.student.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Guruhga qo'shish">
+                <group>
+                    <field name="lead_id" invisible="1"/>
+                    <field name="batch_id" options="{'no_create': True, 'no_open': True}"/>
+                </group>
+                <footer>
+                    <button name="action_apply" string="Tasdiqlash" type="object" class="oe_highlight"/>
+                    <button string="Bekor qilish" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_crm_lead_to_student_wizard" model="ir.actions.act_window">
+        <field name="name">Guruhga qo'shish</field>
+        <field name="res_model">crm.lead.to.student.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="crm.model_crm_lead" />
+        <field name="binding_view_types">list,form</field>
+    </record>
+</odoo>

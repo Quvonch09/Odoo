@@ -1,0 +1,952 @@
+# Uzbek translation for Odoo CRM + sfera_admission_custom
+# Copyright (C) 2026
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo CRM uz\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-24 00:00+0000\n"
+"PO-Revision-Date: 2026-03-24 00:00+0000\n"
+"Language: uz\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# ───────────────────────────────────────────
+#  CUSTOM MODULE — sfera_admission_custom
+# ───────────────────────────────────────────
+
+msgid "Ism"
+msgstr "Ism"
+
+msgid "Familiya"
+msgstr "Familiya"
+
+msgid "Talaba telefoni"
+msgstr "Talaba telefoni"
+
+msgid "Ota-ona telefoni"
+msgstr "Ota-ona telefoni"
+
+msgid "Ota-onasini ismi"
+msgstr "Ota-ona ismi"
+
+msgid "Yoshi"
+msgstr "Yoshi"
+
+msgid "Kurs"
+msgstr "Kurs"
+
+msgid "Manzil"
+msgstr "Manzil"
+
+msgid "Talaba ma'lumotlari"
+msgstr "Talaba ma'lumotlari"
+
+# ───────────────────────────────────────────
+#  CRM — Asosiy atamalar
+# ───────────────────────────────────────────
+
+msgid "Pipeline"
+msgstr "Truboprovodlar"
+
+msgid "Lead"
+msgstr "Potentsial mijoz"
+
+msgid "Leads"
+msgstr "Potentsial mijozlar"
+
+msgid "Opportunity"
+msgstr "Imkoniyat"
+
+msgid "Opportunities"
+msgstr "Imkoniyatlar"
+
+msgid "Won"
+msgstr "Yutildi"
+
+msgid "Lost"
+msgstr "Yo'qotildi"
+
+msgid "Mark Won"
+msgstr "Yutilgan deb belgilash"
+
+msgid "Mark Lost"
+msgstr "Yo'qotilgan deb belgilash"
+
+msgid "Restore"
+msgstr "Tiklash"
+
+msgid "Stage"
+msgstr "Bosqich"
+
+msgid "Stages"
+msgstr "Bosqichlar"
+
+msgid "New"
+msgstr "Yangi"
+
+msgid "Qualified"
+msgstr "Tasdiqlangan"
+
+msgid "Proposition"
+msgstr "Taklif"
+
+msgid "Won Stage"
+msgstr "Yutilgan bosqich"
+
+msgid "Probability"
+msgstr "Ehtimollik"
+
+msgid "Expected Revenue"
+msgstr "Kutilgan daromad"
+
+msgid "Prorated Revenue"
+msgstr "Hisoblangan daromad"
+
+msgid "Recurring Revenue"
+msgstr "Takroriy daromad"
+
+msgid "Recurring Plan"
+msgstr "Takroriy reja"
+
+msgid "Company"
+msgstr "Kompaniya"
+
+msgid "Contact Name"
+msgstr "Kontakt ismi"
+
+msgid "Email"
+msgstr "Elektron pochta"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Mobile"
+msgstr "Mobil telefon"
+
+msgid "Website"
+msgstr "Veb-sayt"
+
+msgid "Priority"
+msgstr "Ustuvorlik"
+
+msgid "Tags"
+msgstr "Teglar"
+
+msgid "Salesperson"
+msgstr "Sotuv menejer"
+
+msgid "Sales Team"
+msgstr "Sotuv jamoasi"
+
+msgid "Campaign"
+msgstr "Kampaniya"
+
+msgid "Medium"
+msgstr "Kanal"
+
+msgid "Source"
+msgstr "Manba"
+
+msgid "Next Activity"
+msgstr "Keyingi faoliyat"
+
+msgid "Next Activity Type"
+msgstr "Keyingi faoliyat turi"
+
+msgid "Next Activity Deadline"
+msgstr "Keyingi faoliyat muddati"
+
+msgid "Last Activity"
+msgstr "Oxirgi faoliyat"
+
+msgid "Last Activity Type"
+msgstr "Oxirgi faoliyat turi"
+
+msgid "Activities"
+msgstr "Faoliyatlar"
+
+msgid "Internal Notes"
+msgstr "Ichki izohlar"
+
+msgid "Description"
+msgstr "Tavsif"
+
+msgid "City"
+msgstr "Shahar"
+
+msgid "Country"
+msgstr "Mamlakat"
+
+msgid "State"
+msgstr "Viloyat"
+
+msgid "Zip"
+msgstr "Pochta indeksi"
+
+msgid "Street"
+msgstr "Ko'cha"
+
+msgid "Customer"
+msgstr "Mijoz"
+
+msgid "Active"
+msgstr "Faol"
+
+msgid "Archived"
+msgstr "Arxivlangan"
+
+msgid "Created"
+msgstr "Yaratilgan"
+
+msgid "Closed"
+msgstr "Yopilgan"
+
+msgid "Converted"
+msgstr "O'tkazilgan"
+
+msgid "Assign"
+msgstr "Tayinlash"
+
+msgid "Convert to Opportunity"
+msgstr "Imkoniyatga o'tkazish"
+
+msgid "Merge"
+msgstr "Birlashtirish"
+
+msgid "Merge with"
+msgstr "Bilan birlashtirish"
+
+msgid "Closing Date"
+msgstr "Yopilish sanasi"
+
+msgid "Expected Closing"
+msgstr "Kutilayotgan yopilish"
+
+msgid "Date of Last Stage Update"
+msgstr "Oxirgi bosqich yangilanish sanasi"
+
+msgid "Creation Date"
+msgstr "Yaratilish sanasi"
+
+msgid "Lost Reason"
+msgstr "Yo'qotish sababi"
+
+msgid "Lost Reasons"
+msgstr "Yo'qotish sabablari"
+
+# ───────────────────────────────────────────
+#  CRM — Kanban / Pipeline ko'rinishi
+# ───────────────────────────────────────────
+
+msgid "Add a column"
+msgstr "Ustun qo'shish"
+
+msgid "Add"
+msgstr "Qo'shish"
+
+msgid "Add an item"
+msgstr "Element qo'shish"
+
+msgid "Quick add"
+msgstr "Tez qo'shish"
+
+msgid "Edit"
+msgstr "Tahrirlash"
+
+msgid "Delete"
+msgstr "O'chirish"
+
+msgid "Fold"
+msgstr "Yig'ish"
+
+msgid "Unfold"
+msgstr "Yoyish"
+
+msgid "Group By"
+msgstr "Guruhlash"
+
+msgid "Filter"
+msgstr "Filtr"
+
+msgid "Search"
+msgstr "Qidirish"
+
+msgid "List"
+msgstr "Ro'yxat"
+
+msgid "Kanban"
+msgstr "Kanban"
+
+msgid "Map"
+msgstr "Xarita"
+
+msgid "Graph"
+msgstr "Grafik"
+
+msgid "Pivot"
+msgstr "Jadval"
+
+msgid "Calendar"
+msgstr "Taqvim"
+
+msgid "Activity"
+msgstr "Faoliyat"
+
+# ───────────────────────────────────────────
+#  CRM — Harakatlar / Tugmalar
+# ───────────────────────────────────────────
+
+msgid "Save"
+msgstr "Saqlash"
+
+msgid "Save manually"
+msgstr "Qo'lda saqlash"
+
+msgid "Discard"
+msgstr "Bekor qilish"
+
+msgid "Create"
+msgstr "Yaratish"
+
+msgid "New"
+msgstr "Yangi"
+
+msgid "Import"
+msgstr "Import qilish"
+
+msgid "Export"
+msgstr "Export qilish"
+
+msgid "Action"
+msgstr "Harakat"
+
+msgid "Print"
+msgstr "Chop etish"
+
+msgid "Send"
+msgstr "Yuborish"
+
+msgid "Send Message"
+msgstr "Xabar yuborish"
+
+msgid "Log note"
+msgstr "Izoh yozish"
+
+msgid "Schedule Activity"
+msgstr "Faoliyat rejalash"
+
+msgid "No records found"
+msgstr "Hech qanday yozuv topilmadi"
+
+msgid "Upload your file"
+msgstr "Faylingizni yuklang"
+
+msgid "or drop it here"
+msgstr "yoki bu yerga tashlang"
+
+# ───────────────────────────────────────────
+#  CRM — Menyu nomlari
+# ───────────────────────────────────────────
+
+msgid "CRM"
+msgstr "CRM"
+
+msgid "My Pipeline"
+msgstr "Mening truboprovodim"
+
+msgid "My Activities"
+msgstr "Mening faoliyatlarim"
+
+msgid "Reporting"
+msgstr "Hisobotlar"
+
+msgid "Configuration"
+msgstr "Sozlamalar"
+
+msgid "Sales Teams"
+msgstr "Sotuv jamoalari"
+
+msgid "Salespeople"
+msgstr "Sotuv menejerlari"
+
+msgid "Pipeline Analysis"
+msgstr "Truboprovodlar tahlili"
+
+msgid "Leads Analysis"
+msgstr "Potentsial mijozlar tahlili"
+
+# ───────────────────────────────────────────
+#  SETTINGS — Sozlamalar
+# ───────────────────────────────────────────
+
+msgid "Settings"
+msgstr "Sozlamalar"
+
+msgid "General Settings"
+msgstr "Umumiy sozlamalar"
+
+msgid "Users"
+msgstr "Foydalanuvchilar"
+
+msgid "User"
+msgstr "Foydalanuvchi"
+
+msgid "Language"
+msgstr "Til"
+
+msgid "Timezone"
+msgstr "Vaqt mintaqasi"
+
+msgid "Password"
+msgstr "Parol"
+
+msgid "Confirm Password"
+msgstr "Parolni tasdiqlash"
+
+msgid "Current Password"
+msgstr "Joriy parol"
+
+msgid "New Password"
+msgstr "Yangi parol"
+
+msgid "Name"
+msgstr "Ism"
+
+msgid "Full Name"
+msgstr "To'liq ism"
+
+msgid "Job Position"
+msgstr "Lavozim"
+
+msgid "Job Title"
+msgstr "Unvon"
+
+msgid "Work Phone"
+msgstr "Ish telefoni"
+
+msgid "Work Email"
+msgstr "Ish elektron pochtasi"
+
+msgid "Work Address"
+msgstr "Ish manzili"
+
+msgid "Department"
+msgstr "Bo'lim"
+
+msgid "Manager"
+msgstr "Menejer"
+
+msgid "Coach"
+msgstr "Murabbiy"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Preferences"
+msgstr "Afzalliklar"
+
+msgid "Access Rights"
+msgstr "Kirish huquqlari"
+
+msgid "Groups"
+msgstr "Guruhlar"
+
+# ───────────────────────────────────────────
+#  UMUMIY — Barcha modullarda ishlatiladigan so'zlar
+# ───────────────────────────────────────────
+
+msgid "Yes"
+msgstr "Ha"
+
+msgid "No"
+msgstr "Yo'q"
+
+msgid "OK"
+msgstr "Tasdiqlash"
+
+msgid "Cancel"
+msgstr "Bekor qilish"
+
+msgid "Close"
+msgstr "Yopish"
+
+msgid "Confirm"
+msgstr "Tasdiqlash"
+
+msgid "Back"
+msgstr "Orqaga"
+
+msgid "Next"
+msgstr "Keyingi"
+
+msgid "Previous"
+msgstr "Oldingi"
+
+msgid "Done"
+msgstr "Bajarildi"
+
+msgid "Apply"
+msgstr "Qo'llash"
+
+msgid "Reset"
+msgstr "Tiklash"
+
+msgid "Refresh"
+msgstr "Yangilash"
+
+msgid "Reload"
+msgstr "Qayta yuklash"
+
+msgid "Loading"
+msgstr "Yuklanmoqda"
+
+msgid "Please wait"
+msgstr "Iltimos kuting"
+
+msgid "Error"
+msgstr "Xatolik"
+
+msgid "Warning"
+msgstr "Ogohlantirish"
+
+msgid "Information"
+msgstr "Ma'lumot"
+
+msgid "Success"
+msgstr "Muvaffaqiyat"
+
+msgid "Are you sure?"
+msgstr "Ishonchingiz komilmi?"
+
+msgid "This record will be deleted"
+msgstr "Bu yozuv o'chiriladi"
+
+msgid "This operation cannot be undone"
+msgstr "Bu amalni bekor qilib bo'lmaydi"
+
+msgid "Required field"
+msgstr "Majburiy maydon"
+
+msgid "Invalid value"
+msgstr "Noto'g'ri qiymat"
+
+msgid "Record saved"
+msgstr "Yozuv saqlandi"
+
+msgid "Record deleted"
+msgstr "Yozuv o'chirildi"
+
+msgid "Changes saved"
+msgstr "O'zgarishlar saqlandi"
+
+msgid "Unsaved changes"
+msgstr "Saqlanmagan o'zgarishlar"
+
+msgid "No data"
+msgstr "Ma'lumot yo'q"
+
+msgid "Select"
+msgstr "Tanlash"
+
+msgid "Select All"
+msgstr "Hammasini tanlash"
+
+msgid "Deselect All"
+msgstr "Tanlovni bekor qilish"
+
+msgid "Total"
+msgstr "Jami"
+
+msgid "Subtotal"
+msgstr "Oraliq jami"
+
+msgid "Tax"
+msgstr "Soliq"
+
+msgid "Date"
+msgstr "Sana"
+
+msgid "From"
+msgstr "Dan"
+
+msgid "To"
+msgstr "Gacha"
+
+msgid "Today"
+msgstr "Bugun"
+
+msgid "This Week"
+msgstr "Bu hafta"
+
+msgid "This Month"
+msgstr "Bu oy"
+
+msgid "This Year"
+msgstr "Bu yil"
+
+msgid "January"
+msgstr "Yanvar"
+
+msgid "February"
+msgstr "Fevral"
+
+msgid "March"
+msgstr "Mart"
+
+msgid "April"
+msgstr "Aprel"
+
+msgid "May"
+msgstr "May"
+
+msgid "June"
+msgstr "Iyun"
+
+msgid "July"
+msgstr "Iyul"
+
+msgid "August"
+msgstr "Avgust"
+
+msgid "September"
+msgstr "Sentabr"
+
+msgid "October"
+msgstr "Oktabr"
+
+msgid "November"
+msgstr "Noyabr"
+
+msgid "December"
+msgstr "Dekabr"
+
+msgid "Monday"
+msgstr "Dushanba"
+
+msgid "Tuesday"
+msgstr "Seshanba"
+
+msgid "Wednesday"
+msgstr "Chorshanba"
+
+msgid "Thursday"
+msgstr "Payshanba"
+
+msgid "Friday"
+msgstr "Juma"
+
+msgid "Saturday"
+msgstr "Shanba"
+
+msgid "Sunday"
+msgstr "Yakshanba"
+
+# ───────────────────────────────────────────
+#  CHATTER — Xabarlar
+# ───────────────────────────────────────────
+
+msgid "Followers"
+msgstr "Obunachlar"
+
+msgid "Add Followers"
+msgstr "Obunachilar qo'shish"
+
+msgid "Follow"
+msgstr "Kuzatish"
+
+msgid "Unfollow"
+msgstr "Kuzatishni to'xtatish"
+
+msgid "Log a note"
+msgstr "Izoh qoldirish"
+
+msgid "Send message"
+msgstr "Xabar yuborish"
+
+msgid "Type a message..."
+msgstr "Xabar yozing..."
+
+msgid "Attach files"
+msgstr "Fayl biriktirish"
+
+msgid "Attachment"
+msgstr "Biriktirma"
+
+msgid "Attachments"
+msgstr "Biriktirmalar"
+
+msgid "Mark as Done"
+msgstr "Bajarilgan deb belgilash"
+
+msgid "Mark as Todo"
+msgstr "Bajariladigan deb belgilash"
+
+# ───────────────────────────────────────────
+#  ACTIVITY — Faoliyatlar
+# ───────────────────────────────────────────
+
+msgid "Activity Type"
+msgstr "Faoliyat turi"
+
+msgid "Due Date"
+msgstr "Muddat"
+
+msgid "Summary"
+msgstr "Qisqacha"
+
+msgid "Note"
+msgstr "Izoh"
+
+msgid "Assigned to"
+msgstr "Tayinlangan"
+
+msgid "Email Activity"
+msgstr "Elektron pochta faoliyati"
+
+msgid "Call"
+msgstr "Qo'ng'iroq"
+
+msgid "Meeting"
+msgstr "Uchrashuv"
+
+msgid "To-Do"
+msgstr "Bajariladigan"
+
+msgid "Upload Document"
+msgstr "Hujjat yuklash"
+
+msgid "Overdue"
+msgstr "Muddati o'tgan"
+
+msgid "Today"
+msgstr "Bugun"
+
+msgid "Planned"
+msgstr "Rejalashtirilgan"
+
+# ───────────────────────────────────────────
+#  CONTACTS / PARTNERS
+# ───────────────────────────────────────────
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Contacts"
+msgstr "Kontaktlar"
+
+msgid "Partner"
+msgstr "Hamkor"
+
+msgid "Partners"
+msgstr "Hamkorlar"
+
+msgid "Individual"
+msgstr "Jismoniy shaxs"
+
+msgid "Company"
+msgstr "Yuridik shaxs"
+
+msgid "Address Type"
+msgstr "Manzil turi"
+
+msgid "Invoice Address"
+msgstr "Hisob-faktura manzili"
+
+msgid "Delivery Address"
+msgstr "Yetkazib berish manzili"
+
+msgid "Other Address"
+msgstr "Boshqa manzil"
+
+msgid "Private Address"
+msgstr "Shaxsiy manzil"
+
+# ───────────────────────────────────────────
+#  HISOBOTLAR
+# ───────────────────────────────────────────
+
+msgid "Report"
+msgstr "Hisobot"
+
+msgid "Reports"
+msgstr "Hisobotlar"
+
+msgid "Analysis"
+msgstr "Tahlil"
+
+msgid "Forecast"
+msgstr "Prognoz"
+
+msgid "Expected"
+msgstr "Kutilayotgan"
+
+msgid "Achieved"
+msgstr "Erishilgan"
+
+msgid "Target"
+msgstr "Maqsad"
+
+msgid "Won Opportunities"
+msgstr "Yutilgan imkoniyatlar"
+
+msgid "Lost Opportunities"
+msgstr "Yo'qotilgan imkoniyatlar"
+
+msgid "In Progress"
+msgstr "Jarayonda"
+
+msgid "Count"
+msgstr "Soni"
+
+msgid "Sum"
+msgstr "Yig'indisi"
+
+msgid "Average"
+msgstr "O'rtacha"
+
+msgid "Min"
+msgstr "Minimal"
+
+msgid "Max"
+msgstr "Maksimal"
+
+# ───────────────────────────────────────────
+#  OP.COURSE — OpenEduCat
+# ───────────────────────────────────────────
+
+msgid "Course"
+msgstr "Kurs"
+
+msgid "Courses"
+msgstr "Kurslar"
+
+msgid "Course Category"
+msgstr "Kurs toifasi"
+
+msgid "Duration"
+msgstr "Davomiyligi"
+
+msgid "Credits"
+msgstr "Kreditlar"
+
+msgid "Subject"
+msgstr "Fan"
+
+msgid "Subjects"
+msgstr "Fanlar"
+
+msgid "Faculty"
+msgstr "Fakultet"
+
+msgid "Batch"
+msgstr "Guruh"
+
+msgid "Student"
+msgstr "Talaba"
+
+msgid "Students"
+msgstr "Talabalar"
+
+msgid "Admission"
+msgstr "Qabul"
+
+msgid "Admissions"
+msgstr "Qabullar"
+
+msgid "Academic Year"
+msgstr "O'quv yili"
+
+msgid "Academic Term"
+msgstr "O'quv semestri"
+
+msgid "Classroom"
+msgstr "Sinf xona"
+
+msgid "Timetable"
+msgstr "Dars jadvali"
+
+msgid "Attendance"
+msgstr "Davomat"
+
+msgid "Grade"
+msgstr "Baho"
+
+msgid "Grades"
+msgstr "Baholar"
+
+msgid "Exam"
+msgstr "Imtihon"
+
+msgid "Exams"
+msgstr "Imtihonlar"
+
+msgid "Result"
+msgstr "Natija"
+
+msgid "Results"
+msgstr "Natijalar"
+
+msgid "Fee"
+msgstr "To'lov"
+
+msgid "Fees"
+msgstr "To'lovlar"
+
+msgid "Scholarship"
+msgstr "Stipendiya"
+
+msgid "Certificate"
+msgstr "Sertifikat"
+
+msgid "Degree"
+msgstr "Daraja"
+
+msgid "Instructor"
+msgstr "O'qituvchi"
+
+msgid "Parent"
+msgstr "Ota-ona"
+
+msgid "Guardian"
+msgstr "Vasiy"
+
+# ───────────────────────────────────────────
+#  XATOLIK XABARLARI
+# ───────────────────────────────────────────
+
+msgid "Access Denied"
+msgstr "Kirish taqiqlangan"
+
+msgid "Record not found"
+msgstr "Yozuv topilmadi"
+
+msgid "You are not allowed to perform this action"
+msgstr "Siz bu amalni bajarishga ruxsat yo'q"
+
+msgid "Please fill in all required fields"
+msgstr "Barcha majburiy maydonlarni to'ldiring"
+
+msgid "Invalid email address"
+msgstr "Noto'g'ri elektron pochta manzili"
+
+msgid "Invalid phone number"
+msgstr "Noto'g'ri telefon raqami"
+
+msgid "Duplicate record"
+msgstr "Takroriy yozuv"
+
+msgid "Cannot delete record"
+msgstr "Yozuvni o'chirib bo'lmaydi"
+
+msgid "Server Error"
+msgstr "Server xatoligi"
+
+msgid "Connection Error"
+msgstr "Ulanish xatoligi"
+
+msgid "Session Expired"
+msgstr "Sessiya tugagan"
+
+msgid "Please login again"
+msgstr "Iltimos qayta kiring"

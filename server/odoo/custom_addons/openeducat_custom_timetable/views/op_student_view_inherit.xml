@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_op_student_form_inherit_batch" model="ir.ui.view">
+        <field name="name">op.student.form.inherit.batch</field>
+        <field name="model">op.student</field>
+        <field name="inherit_id" ref="openeducat_core.view_op_student_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='gender']" position="after">
+                <field name="batch_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

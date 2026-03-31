@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_op_lesson,op.lesson,model_op_lesson,openeducat_core.group_op_back_office_admin,1,1,1,1
+access_op_lesson_faculty,op.lesson,model_op_lesson,openeducat_core.group_op_faculty,1,1,1,1

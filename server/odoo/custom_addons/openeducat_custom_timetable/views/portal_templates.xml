@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="teacher_dashboard_template" name="Teacher Dashboard">
+        <t t-call="website.layout">
+            <div class="container mt-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 class="text-primary">Teacher Portal</h2>
+                        <hr/>
+                        
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-body d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5>Welcome, <t t-esc="user.name"/>!</h5>
+                                    <p class="text-muted mb-0">Login: <t t-esc="user.login"/> | User ID: <t t-esc="user.id"/></p>
+                                </div>
+                                <a href="/teacher/exams" class="btn btn-primary shadow-sm">
+                                    <i class="fa fa-graduation-cap"/> Imtihonlar (Exams)
+                                </a>
+                            </div>
+                            <div class="card-body pt-0">
+                                
+                                <t t-if="not faculty">
+                                    <div class="alert alert-warning">
+                                        Warning: No Faculty record linked to this user account.
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+
+                        <h4 class="mb-3">Today's Sessions</h4>
+                        <table class="table table-hover border">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Session Name</th>
+                                    <th>Course</th>
+                                    <th>Start Time</th>
+                                    <th>Action</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="sessions">
+                                    <t t-foreach="sessions" t-as="session">
+                                        <tr>
+                                            <td><t t-esc="session.name"/></td>
+                                            <td><t t-esc="session.course_id.name"/></td>
+                                            <td><t t-esc="session.start_datetime"/></td>
+                                            <td>
+                                                <a t-attf-href="/teacher/session/#{session.id}/attendance" class="btn btn-sm btn-success">
+                                                    <i class="fa fa-check-square-o"/> Take Attendance
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td colspan="4" class="text-center">No active sessions found for today.</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

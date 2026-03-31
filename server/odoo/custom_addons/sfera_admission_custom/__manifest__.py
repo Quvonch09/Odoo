@@ -1,0 +1,31 @@
+{
+    'name': 'Sfera Admission Customization',
+    'version': '19.0.1.0.0',
+    'summary': 'Custom logic for OpenEduCat Admission and Lead Management',
+    'depends': [
+        'openeducat_admission',
+        'openeducat_core', 
+        'openeducat_erp', 
+        'mail',
+        'crm',
+        'project',
+        'openeducat_fees',
+        'openeducat_custom_timetable',
+        'openeducat_parent',
+        'website'
+        ],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/crm_stage_data.xml',
+        'wizard/crm_lead_to_student_view.xml',
+        'views/admission_view.xml',
+        'views/admission_lite_view.xml',
+        'views/student_custom_view.xml',
+        'views/crm_lead_view.xml',
+        'views/lead_form_template.xml',
+    ],
+    'installable': True,
+    'application': False,
+    'license': 'LGPL-3',
+    'auto_install': False,
+}

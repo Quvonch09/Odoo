@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_op_lesson_tree" model="ir.ui.view">
+        <field name="name">op.lesson.list</field>
+        <field name="model">op.lesson</field>
+        <field name="arch" type="xml">
+            <list string="Lessons">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="course_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_op_lesson_form" model="ir.ui.view">
+        <field name="name">op.lesson.form</field>
+        <field name="model">op.lesson</field>
+        <field name="arch" type="xml">
+            <form string="Lesson">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="course_id"/>
+                        <field name="sequence"/>
+                    </group>
+                    <label for="description"/>
+                    <field name="description"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_open_op_lesson_view" model="ir.actions.act_window">
+        <field name="name">Lessons</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">op.lesson</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_op_lesson"
+              name="Lessons"
+              parent="openeducat_core.menu_op_school_config_course"
+              action="act_open_op_lesson_view"
+              sequence="20"/>
+</odoo>
