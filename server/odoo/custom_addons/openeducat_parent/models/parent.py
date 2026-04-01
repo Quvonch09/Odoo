@@ -179,8 +179,9 @@ class OpStudent(models.Model):
                     ('child_ids', 'in', self.user_id.id)])
                 for user_id in user_ids:
                     child_ids = user_id.child_ids.ids
-                    child_ids.remove(self.user_id.id)
-                    user_id.child_ids = [(6, 0, child_ids)]
+                    if self.user_id.id in child_ids:
+                        child_ids.remove(self.user_id.id)
+                        user_id.child_ids = [(6, 0, child_ids)]
         if vals.get('user_id', False):
             for parent_id in self.parent_ids:
                 child_ids = parent_id.user_id.child_ids.ids
@@ -193,9 +194,11 @@ class OpStudent(models.Model):
         for record in self:
             if record.parent_ids:
                 for parent_id in record.parent_ids:
-                    child_ids = parent_id.user_id.child_ids.ids
-                    child_ids.remove(record.user_id.id)
-                    parent_id.name.user_id.child_ids = [(6, 0, child_ids)]
+                    if parent_id.user_id and record.user_id:
+                        child_ids = parent_id.user_id.child_ids.ids
+                        if record.user_id.id in child_ids:
+                            child_ids.remove(record.user_id.id)
+                            parent_id.user_id.child_ids = [(6, 0, child_ids)]
         return super(OpStudent, self).unlink()
 
     def get_parent(self):
