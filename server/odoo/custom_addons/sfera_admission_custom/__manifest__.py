@@ -12,7 +12,8 @@
         'openeducat_fees',
         'openeducat_custom_timetable',
         'openeducat_parent',
-        'website'
+        'website',
+        'event'
         ],
     'data': [
         'security/ir.model.access.csv',

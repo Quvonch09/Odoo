@@ -41,6 +41,11 @@ class CrmLead(models.Model):
         ('other', 'Boshqa'),
     ], string="Qayerdan keldi", default='other')
     lead_count_compute = fields.Integer(string="Lead Soni", compute="_compute_lead_count", store=True)
+    event_id = fields.Many2one('event.event', string="Ochiq dars (Event)")
+
+    _sql_constraints = [
+        ('student_phone_unique', 'unique(student_phone)', 'Bu telefon raqami allaqachon lead sifatida qo\'shilgan!')
+    ]
 
     @api.depends('first_name') # Har doim 1 bo'lishi uchun
     def _compute_lead_count(self):
@@ -60,6 +65,18 @@ class CrmLead(models.Model):
             # Yosh validatsiyasidan o'tish uchun (rasmdagi xatolikka qarshi)
             if 'age' in vals and (not vals.get('age') or vals.get('age') < 3):
                 vals['age'] = 15
+            
+            # 2. lead qo'shilganda contact avtomatik yaratish
+            if not vals.get('partner_id') and vals.get('student_phone'):
+                # Check if partner with this phone exists first to avoid duplicates
+                partner = self.env['res.partner'].sudo().search([('phone', '=', vals.get('student_phone'))], limit=1)
+                if not partner:
+                    partner = self.env['res.partner'].sudo().create({
+                        'name': vals.get('name') or f"{vals.get('first_name')} {vals.get('last_name') or ''}",
+                        'phone': vals.get('student_phone'),
+                        'type': 'contact',
+                    })
+                vals['partner_id'] = partner.id
 
         records = super(CrmLead, self).create(vals_list)
         
@@ -178,17 +195,28 @@ class CrmLead(models.Model):
             # ─── Avtomatik activity yaratish (mavjud kod) ───
             if stage_name in STAGE_ACTIVITY_MAP:
                 config = STAGE_ACTIVITY_MAP[stage_name]
-                deadline = fields.Date.context_today(self) + timedelta(days=config['days'])
+                deadline_base = fields.Date.context_today(self) + timedelta(days=config['days'])
 
                 for lead in self:
                     if old_stage_map.get(lead.id) != vals['stage_id']:
+                        # 4. Event integrated task date
+                        date_deadline = deadline_base
+                        if stage_name == "O'quv Markazga kelaman dedi" and lead.event_id:
+                            date_deadline = lead.event_id.date_begin.date()
+
                         lead.activity_schedule(
                             'mail.mail_activity_data_todo',
-                            date_deadline=deadline,
+                            date_deadline=date_deadline,
                             summary=config['summary'],
                             note=config['note'],
                             user_id=self.env.uid,
                         )
+
+            # 5. Ochiq darsga keldi stagega o'tganda task tugatilishi kerak
+            if stage_name == "Ochiq darsga keldi":
+                for lead in self:
+                    if old_stage_map.get(lead.id) != vals['stage_id']:
+                        lead.activity_ids.filtered(lambda a: a.activity_type_id.category == 'todo' or a.summary == "O'quv markazga kelishini tasdiqlash").action_done()
 
             # 'Kursga yozildi' stagega o'tganda parent yaratish
             # wizard (Guruhga qo'shish) orqali student yaratilganda avtomatik bo'ladi.

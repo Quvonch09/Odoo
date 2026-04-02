@@ -32,33 +32,35 @@
 
 
 
+            <!-- Hide the standard tag_ids field first -->
+            <xpath expr="//field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
             <xpath expr="//group[@name='opportunity_partner']" position="replace">
-                <div class="row mt-3">
-                    <div class="col-md-6 border-end">
-                        <group string="TALABA MA'LUMOTLARI">
-                            <field name="age" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="course_id" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="admission_id" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="lead_source" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="batch_id" readonly="1" invisible="not batch_id"/>
-                            <field name="student_id" readonly="1" invisible="not student_id"/>
-                        </group>
-                    </div>
-                    <div class="col-md-6">
-                        <group string="ALOQA VA MANZIL">
-                            <field name="student_phone" widget="phone" string="Asosiy telefon"/>
-                            <field name="parent_name" string="Vasiy ismi" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="parent_phone" widget="phone" string="Vasiy telefoni" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="address" string="Yashash manzili" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        </group>
-                    </div>
-                </div>
+                <group>
+                    <group string="TALABA MA'LUMOTLARI" name="student_info">
+                        <field name="age" invisible="stage_id.name == 'Yangi Lead' or not stage_id" class="oe_inline"/>
+                        <field name="course_id" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <field name="admission_id" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <field name="event_id" options="{'no_create': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <field name="lead_source" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <field name="batch_id" readonly="1" invisible="not batch_id"/>
+                        <field name="student_id" readonly="1" invisible="not student_id"/>
+                    </group>
+                    <group string="ALOQA VA MANZIL" name="contact_info">
+                        <field name="student_phone" widget="phone" string="Asosiy telefon"/>
+                        <field name="parent_name" string="Vasiy ismi" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <field name="parent_phone" widget="phone" string="Vasiy telefoni" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <field name="address" string="Yashash manzili" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                    </group>
+                </group>
             </xpath>
 
             <xpath expr="//field[@name='user_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
             <xpath expr="//field[@name='team_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
             <xpath expr="//field[@name='date_deadline']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-            <xpath expr="//field[@name='tag_ids']" position="attributes"><attribute name="invisible">1</attribute></xpath>
             <xpath expr="//field[@name='priority']" position="attributes"><attribute name="invisible">1</attribute></xpath>
             <xpath expr="//field[@name='expected_revenue']" position="attributes"><attribute name="invisible">1</attribute></xpath>
             <xpath expr="//field[@name='probability']" position="attributes"><attribute name="invisible">1</attribute></xpath>
