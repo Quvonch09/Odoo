@@ -1,0 +1,159 @@
+.o_attendance_dashboard {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+
+    .bg-gradient-soft {
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    }
+
+    .btn {
+        transition: all 0.2s ease;
+        &:hover { transform: translateY(-1px); }
+        &:active { transform: translateY(0); }
+    }
+
+    .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .day-header {
+        min-width: 60px;
+        transition: all 0.2s;
+        &.bg-primary {
+            background-color: #0d6efd !important;
+            border-color: #0d6efd;
+        }
+    }
+
+    .attendance-cell {
+        cursor: pointer;
+        transition: background-color 0.1s;
+        position: relative;
+        &:hover {
+            background-color: #f1f5f9;
+        }
+    }
+
+    .status-cell {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: white;
+        transition: transform 0.2s;
+
+        &.status-present { background-color: #22c55e; box-shadow: 0 4px 6px -1px rgba(34, 197, 94, 0.2); }
+        &.status-absent { background-color: #ef4444; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2); }
+        &.status-excused { background-color: #f59e0b; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2); }
+    }
+
+    .status-cell-placeholder {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &.border-dashed { border: 2px dashed #cbd5e1; }
+    }
+
+    .remark-dot {
+        position: absolute;
+        bottom: 4px;
+        right: 4px;
+        width: 6px;
+        height: 6px;
+        background-color: #64748b;
+        border-radius: 50%;
+    }
+
+    .student-initials {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    /* Modal styles */
+    .dashboard-modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1050;
+    }
+
+    .dashboard-modal {
+        background: white;
+        border-radius: 24px;
+        width: 90%;
+        max-width: 480px;
+        padding: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .status-option-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.2s;
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    .status-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Animations */
+    .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .animate-slide-up { animation: slide-up 0.4s cubic-bezier(0, 0, 0.2, 1); }
+    .fade-in { animation: fadeIn 0.3s ease; }
+
+    @keyframes pop {
+        0% { transform: scale(0.5); opacity: 0; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes slide-up {
+        0% { transform: translateY(30px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .sticky-left {
+        position: sticky;
+        left: 0;
+        z-index: 5;
+    }
+
+    .z-index-10 { z-index: 10; }
+    .z-index-20 { z-index: 20; }
+}

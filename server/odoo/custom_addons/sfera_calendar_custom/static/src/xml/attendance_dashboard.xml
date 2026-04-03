@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="sfera_calendar_custom.AttendanceDashboard" owl="1">
+        <div class="o_attendance_dashboard p-4 bg-white min-vh-100">
+            <!-- Header Section -->
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-secondary rounded-circle shadow-sm" t-on-click="onBack">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h2 class="m-0 fw-bold text-dark"><t t-esc="state.batch_name"/></h2>
+                        <p class="text-muted m-0"><t t-esc="state.student_count"/> o'quvchi · <span class="badge bg-soft-info text-info rounded-pill"><t t-esc="state.current_month_name"/> <t t-esc="state.year"/></span></p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 align-items-center">
+                   <div class="btn-group shadow-sm">
+                        <button class="btn btn-light" t-on-click="prevMonth"><i class="fa fa-chevron-left"></i></button>
+                        <button class="btn btn-light fw-bold"><t t-esc="state.current_month_name"/></button>
+                        <button class="btn btn-light" t-on-click="nextMonth"><i class="fa fa-chevron-right"></i></button>
+                   </div>
+                   <button class="btn btn-dark px-4 shadow-sm" t-on-click="fetchData">Yangilash</button>
+                </div>
+            </div>
+
+            <!-- Legend Section -->
+            <div class="d-flex gap-4 mb-4 align-items-center bg-light p-3 rounded-3 shadow-sm border">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="status-indicator bg-success shadow-sm"></div>
+                    <span class="fw-medium">Keldi</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="status-indicator bg-danger shadow-sm"></div>
+                    <span class="fw-medium">Kelmadi</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="status-indicator bg-warning shadow-sm"></div>
+                    <span class="fw-medium">Sababli</span>
+                </div>
+                <div class="ms-auto d-flex gap-3 align-items-center">
+                    <div class="d-flex align-items-center gap-1"><i class="fa fa-circle text-primary"></i> <span>Bugun</span></div>
+                    <div class="d-flex align-items-center gap-1"><i class="fa fa-lock text-muted opacity-50"></i> <span>Kelajak</span></div>
+                </div>
+            </div>
+
+            <!-- Attendance Grid -->
+            <div class="table-responsive shadow-lg rounded-4 overflow-hidden border">
+                <table class="table table-hover table-bordered mb-0 bg-white align-middle">
+                    <thead class="bg-light sticky-top">
+                        <tr>
+                            <th class="ps-4 py-3 sticky-left bg-light z-index-20" style="min-width: 200px;">O'QUVCHI</th>
+                            <t t-foreach="state.sessions" t-as="session" t-key="session.id">
+                                <th class="text-center py-3 day-header" t-att-class="{'bg-primary text-white': session.is_today}">
+                                    <div class="small fw-normal text-uppercase opacity-75"><t t-esc="session.weekday_short"/></div>
+                                    <div class="fs-5 fw-bold"><t t-esc="session.day"/></div>
+                                </th>
+                            </t>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="state.students" t-as="student" t-key="student.id">
+                            <td class="ps-4 fw-medium border-end sticky-left bg-white z-index-10">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="student-initials bg-gradient-soft text-primary shadow-sm"><t t-esc="student.initials"/></span>
+                                    <t t-esc="student.name"/>
+                                </div>
+                            </td>
+                            <t t-foreach="state.sessions" t-as="session" t-key="session.id">
+                                <td class="text-center p-0 attendance-cell" 
+                                    t-on-click="() => this.openStatusModal(student, session)"
+                                    t-att-title="session.lesson">
+                                    <div class="d-flex align-items-center justify-content-center h-100 w-100 p-2 pointer-on-hover">
+                                        <t t-set="record" t-value="state.attendance[student.id] and state.attendance[student.id][session.id]"/>
+                                        <t t-if="record">
+                                            <div t-if="record.status == 'present'" class="status-cell status-present animate-pop">
+                                                <i class="fa fa-check"></i>
+                                            </div>
+                                            <div t-elif="record.status == 'absent'" class="status-cell status-absent animate-pop">
+                                                <i class="fa fa-times"></i>
+                                            </div>
+                                            <div t-elif="record.status == 'excused'" class="status-cell status-excused animate-pop">
+                                                <i class="fa fa-info"></i>
+                                            </div>
+                                            <div t-else="" class="status-cell bg-transparent border-dashed"></div>
+                                        </t>
+                                        <t t-else="">
+                                            <div t-if="session.is_future" class="status-cell-placeholder bg-light opacity-50">
+                                                <i class="fa fa-lock text-muted"></i>
+                                            </div>
+                                            <div t-else="" class="status-cell-placeholder bg-light border-dashed"></div>
+                                        </t>
+                                    </div>
+                                    <div t-if="record and record.remark" class="remark-dot" t-att-title="record.remark"></div>
+                                </td>
+                            </t>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Status Modal -->
+            <div t-if="state.showModal" class="dashboard-modal-backdrop fade-in" t-on-click="closeModal">
+                <div class="dashboard-modal animate-slide-up" t-on-click.stop="">
+                    <div class="modal-header border-0 pb-0">
+                        <div class="d-flex flex-column" t-if="state.activeStudent">
+                            <h4 class="mb-0 fw-bold"><t t-esc="state.activeStudent.name"/></h4>
+                            <span class="badge bg-primary-soft text-primary align-self-start mt-2">Dars sanasi: <t t-esc="state.activeSession.date"/></span>
+                        </div>
+                        <button class="btn-close" t-on-click="closeModal"></button>
+                    </div>
+                    <div class="modal-body py-4">
+                        <p class="text-muted mb-4 fs-5">Davomatni tanlang:</p>
+                        <div class="d-flex justify-content-around gap-4 status-selector-container">
+                            <div class="status-option-item" t-on-click="() => this.setStatus('present')">
+                                <div class="status-icon bg-success bg-opacity-10 text-success border border-success border-opacity-25 shadow-sm">
+                                    <i class="fa fa-check fs-2"></i>
+                                </div>
+                                <span class="mt-3 fw-bold text-success">Keldi</span>
+                            </div>
+                            <div class="status-option-item" t-on-click="() => this.onSelectAbsent('absent')">
+                                <div class="status-icon bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 shadow-sm">
+                                    <i class="fa fa-times fs-2"></i>
+                                </div>
+                                <span class="mt-3 fw-bold text-danger">Kelmadi</span>
+                            </div>
+                            <div class="status-option-item" t-on-click="() => this.onSelectAbsent('excused')">
+                                <div class="status-icon bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 shadow-sm">
+                                    <i class="fa fa-info fs-2"></i>
+                                </div>
+                                <span class="mt-3 fw-bold text-warning">Sababli</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reason Modal -->
+            <div t-if="state.showReasonModal" class="dashboard-modal-backdrop fade-in" t-on-click="closeReasonModal">
+                <div class="dashboard-modal reason-modal animate-slide-up" t-on-click.stop="">
+                    <div class="modal-header border-0">
+                        <div class="d-flex align-items-center gap-2" t-if="state.activeStudent">
+                             <div t-att-class="state.activeStatus == 'absent' ? 'bg-danger' : 'bg-warning'" class="rounded-circle d-flex align-items-center justify-content-center text-white p-2 shadow-sm" style="width:32px; height:32px;">
+                                <i t-att-class="state.activeStatus == 'absent' ? 'fa fa-times' : 'fa fa-info'"></i>
+                             </div>
+                             <h4 class="m-0 fw-bold">
+                                <t t-esc="state.activeStatus == 'absent' ? 'Kelmadi' : 'Sababli'"/> — <t t-esc="state.activeStudent.name"/>
+                             </h4>
+                        </div>
+                        <button class="btn-close" t-on-click="closeReasonModal"></button>
+                    </div>
+                    <div class="modal-body py-4" t-if="state.activeStudent">
+                        <label class="form-label text-muted fs-6 mb-3">Sabab yoki izoh kiriting:</label>
+                        <textarea class="form-control rounded-4 p-3 shadow-none border-2 focus-primary" rows="4" 
+                                  t-model="state.activeRemark" 
+                                  placeholder="Masalan: Kasal, Chempionat, Oilaviy sabab..."
+                                  maxlength="200"></textarea>
+                        <div class="text-end mt-2 text-muted small"><t t-esc="state.activeRemark.length"/> / 200</div>
+                        
+                        <div class="d-flex gap-3 mt-5">
+                            <button class="btn btn-light flex-grow-1 py-3 fw-bold rounded-3 shadow-sm border" t-on-click="closeReasonModal">Bekor</button>
+                            <button class="btn btn-danger flex-grow-1 py-3 fw-bold rounded-3 shadow-sm" 
+                                    t-on-click="saveWithReason"
+                                    t-att-class="state.activeStatus == 'absent' ? 'btn-danger' : 'btn-warning text-white'">
+                                Saqlash
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

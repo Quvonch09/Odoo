@@ -82,10 +82,9 @@ class TeacherPortal(http.Controller):
             except Exception as e:
                 return f"Attendance Sheet yaratishda xato: {str(e)}"
 
-        # 4. Odoo 19 formatida backendga redirect
-        redirect_url = f"/odoo/action-openeducat_attendance.act_open_op_attendance_sheet_view/{attendance_sheet.id}"
-        
-        return request.redirect(redirect_url)
+        # 4. Yangi interaktiv davomat paneliga redirect (Odoo 19 format)
+        # Odoo 19 da client actionga to'g'ridan to'g'ri o'tish uchun url formati:
+        return request.redirect(f"/odoo/batches/{session.batch_id.id}/sfera_attendance_dashboard")
 
     @http.route(['/teacher/exams'], type='http', auth="user", website=True)
     def teacher_exams_redirect(self, **kwargs):

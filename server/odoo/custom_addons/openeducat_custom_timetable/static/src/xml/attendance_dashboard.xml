@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="openeducat_custom_timetable.AttendanceDashboard" owl="1">
+        <div class="o_attendance_dashboard p-4 bg-white min-vh-100">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-secondary" t-on-click="onBack"><i class="fa fa-arrow-left"></i></button>
+                    <h2 class="m-0 fw-bold"><t t-esc="state.batch_name"/></h2>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-light" t-on-click="fetchData"><i class="fa fa-refresh"></i> Yangilash</button>
+                </div>
+            </div>
+
+            <div t-if="!state.sessions.length" class="alert alert-info text-center py-5">
+                Ushbu oy uchun darslar topilmadi.
+            </div>
+
+            <div t-if="state.sessions.length" class="table-responsive shadow-sm border rounded">
+                <table class="table table-bordered mb-0 align-middle table-hover">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-3" style="min-width: 250px;">O'QUVCHILAR</th>
+                            <t t-foreach="state.sessions" t-as="session" t-key="session.id">
+                                <th class="text-center">
+                                    <div class="small fw-normal text-muted"><t t-esc="session.weekday"/></div>
+                                    <div class="fw-bold"><t t-esc="session.day"/></div>
+                                </th>
+                            </t>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="state.students" t-as="student" t-key="student.id">
+                            <td class="ps-3 fw-medium text-dark"><t t-esc="student.name"/></td>
+                            <t t-foreach="state.sessions" t-as="session" t-key="session.id">
+                                <td class="text-center p-2 cursor-pointer" t-on-click="() => this.openStatusModal(student, session)">
+                                    <t t-set="record" t-value="state.attendance[student.id] and state.attendance[student.id][session.id]"/>
+                                    <t t-if="record">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center m-auto shadow-sm" 
+                                             t-att-style="'width:32px; height:32px; color:white; background-color:' + (record.status == 'present' ? '#22c55e' : record.status == 'absent' ? '#ef4444' : '#f59e0b')">
+                                            <i t-att-class="record.status == 'present' ? 'fa fa-check' : record.status == 'absent' ? 'fa fa-times' : 'fa fa-info'"></i>
+                                        </div>
+                                    </t>
+                                    <t t-else="">
+                                        <div class="border rounded-circle m-auto bg-light border-dashed" style="width:32px; height:32px; opacity:0.5;"></div>
+                                    </t>
+                                </td>
+                            </t>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modals -->
+            <div t-if="state.showModal" class="modal fade show d-block" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-4 p-4 shadow-lg border-0">
+                        <div class="modal-header border-0 pb-0 justify-content-center">
+                            <h4 class="fw-bold fs-3 mb-0">Davomatni belgilang</h4>
+                        </div>
+                        <div class="modal-body p-4 pt-5">
+                            <div class="d-flex justify-content-between gap-3">
+                                <button class="btn btn-success py-4 flex-grow-1 fw-bold rounded-4 fs-5" t-on-click="() => this.setStatus('present')">KELDI</button>
+                                <button class="btn btn-danger py-4 flex-grow-1 fw-bold rounded-4 fs-5" t-on-click="() => this.setStatus('absent')">KELMADI</button>
+                                <button class="btn btn-warning py-4 flex-grow-1 fw-bold rounded-4 fs-5" t-on-click="() => this.setStatus('excused')">SABABLI</button>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0 justify-content-center">
+                            <button class="btn btn-link text-muted fw-bold" t-on-click="() => this.state.showModal = false">Bekor qilish</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div t-if="state.showReasonModal" class="modal fade show d-block" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content rounded-4 p-4 shadow-lg border-0">
+                        <div class="modal-header border-0">
+                            <h4 class="fw-bold">Sababni kiriting</h4>
+                        </div>
+                        <div class="modal-body">
+                            <textarea class="form-control rounded-4 p-3 shadow-none border-2" rows="4" 
+                                      t-on-input="(ev) => state.activeRemark = ev.target.value"
+                                      t-att-value="state.activeRemark"
+                                      placeholder="Masalan: Kasal edi, darsda uxlab qolgan..."></textarea>
+                        </div>
+                        <div class="modal-footer border-0 p-3 pt-0">
+                            <button class="btn btn-light rounded-pill px-4 fw-bold flex-grow-1 py-3" t-on-click="() => this.state.showReasonModal = false">Bekor qilish</button>
+                            <button class="btn btn-dark rounded-pill px-4 fw-bold flex-grow-1 py-3" t-on-click="() => this.saveAttendance(state.activeRemark)">Saqlash</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

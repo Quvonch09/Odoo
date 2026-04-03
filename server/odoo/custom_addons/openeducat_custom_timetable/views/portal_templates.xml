@@ -29,37 +29,39 @@
                         </div>
 
                         <h4 class="mb-3">Today's Sessions</h4>
-                        <table class="table table-hover border">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>Session Name</th>
-                                    <th>Course</th>
-                                    <th>Start Time</th>
-                                    <th>Action</th> 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <t t-if="sessions">
-                                    <t t-foreach="sessions" t-as="session">
+                        <div class="table-responsive table_premium">
+                            <table class="table table-hover border-0 bg-white">
+                                <thead class="text-white bg-primary">
+                                    <tr>
+                                        <th class="border-0">Session Name</th>
+                                        <th class="border-0">Course</th>
+                                        <th class="border-0">Start Time</th>
+                                        <th class="border-0 text-center">Action</th> 
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="sessions">
+                                        <t t-foreach="sessions" t-as="session">
+                                            <tr>
+                                                <td class="fw-bold"><t t-esc="session.name"/></td>
+                                                <td><t t-esc="session.course_id.name"/></td>
+                                                <td><t t-esc="session.start_datetime.strftime('%H:%M')"/></td>
+                                                <td class="text-center">
+                                                    <a t-attf-href="/teacher/session/#{session.id}/attendance" class="btn btn-sm btn_attendance text-white">
+                                                        <i class="fa fa-check-square-o me-1"/> Take Attendance
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <t t-else="">
                                         <tr>
-                                            <td><t t-esc="session.name"/></td>
-                                            <td><t t-esc="session.course_id.name"/></td>
-                                            <td><t t-esc="session.start_datetime"/></td>
-                                            <td>
-                                                <a t-attf-href="/teacher/session/#{session.id}/attendance" class="btn btn-sm btn-success">
-                                                    <i class="fa fa-check-square-o"/> Take Attendance
-                                                </a>
-                                            </td>
+                                            <td colspan="4" class="text-center py-4 text-muted">No active sessions found for today.</td>
                                         </tr>
                                     </t>
-                                </t>
-                                <t t-else="">
-                                    <tr>
-                                        <td colspan="4" class="text-center">No active sessions found for today.</td>
-                                    </tr>
-                                </t>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="openeducat_custom_timetable.AttendanceDashboard" owl="1">
+        <div class="o_attendance_dashboard p-0 bg-f8f9fa min-vh-100">
+            <!-- Glassmorphism Header -->
+            <div class="o_dashboard_header d-flex justify-content-between align-items-center p-4">
+                <div class="d-flex align-items-center gap-4">
+                    <button class="btn btn-back rounded-circle" t-on-click="onBack">
+                        <i class="fa fa-chevron-left"></i>
+                    </button>
+                    <div>
+                        <h1 class="m-0 fw-800 text-gradient"><t t-esc="state.batch_name"/></h1>
+                        <p class="text-muted m-0 small fw-600"><t t-esc="currentMonthName"/> <t t-esc="state.year"/> • Davomat Monitoringi</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="legend-pills d-none d-md-flex gap-2">
+                        <span class="badge rounded-pill bg-success-soft"><i class="fa fa-circle me-1 small"></i> Keldi</span>
+                        <span class="badge rounded-pill bg-danger-soft"><i class="fa fa-circle me-1 small"></i> Kelmadi</span>
+                        <span class="badge rounded-pill bg-warning-soft"><i class="fa fa-circle me-1 small"></i> Sababli</span>
+                    </div>
+                    <button class="btn btn-glass" t-on-click="fetchData" t-att-disabled="state.isLoading">
+                        <i t-att-class="state.isLoading ? 'fa fa-spinner fa-spin' : 'fa fa-refresh'"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="container-fluid px-4 py-2">
+                <div t-if="!state.sessions.length and !state.isLoading" class="alert-empty rounded-4 p-5 text-center shadow-sm">
+                    <div class="display-1 text-muted mb-4"><i class="fa fa-calendar-o"></i></div>
+                    <h3>Darslar topilmadi</h3>
+                    <p class="text-muted">Ushbu guruh uchun tanlangan oydagi dars jadvali hali shakllantirilmagan.</p>
+                </div>
+
+                <div t-if="state.sessions.length" class="attendance-card shadow-lg rounded-4 overflow-hidden border-0 bg-white">
+                    <div class="table-responsive">
+                        <table class="table table-borderless mb-0 align-middle">
+                            <thead>
+                                <tr>
+                                    <th class="ps-4 sticky-col col-name" style="min-width: 280px;">TALABA F.I.SH.</th>
+                                    <t t-foreach="state.sessions" t-as="session" t-key="session.id">
+                                        <th class="text-center col-date">
+                                            <div class="date-header shadow-sm">
+                                                <div class="day-name"><t t-esc="session.weekday"/></div>
+                                                <div class="day-num"><t t-esc="session.day"/></div>
+                                            </div>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="state.students" t-as="student" t-key="student.id">
+                                    <td class="ps-4 sticky-col col-name">
+                                        <div class="d-flex align-items-center gap-3 py-2">
+                                            <div class="avatar-ring shadow-sm">
+                                                <div class="avatar" t-att-style="'background:hsl(' + (student.id * 137 % 360) + ', 60%, 85%); color:hsl(' + (student.id * 137 % 360) + ', 60%, 25%)'">
+                                                    <t t-esc="student.initials"/>
+                                                </div>
+                                            </div>
+                                            <span class="fw-700 text-dark-blue name-hover"><t t-esc="student.name"/></span>
+                                        </div>
+                                    </td>
+                                    <t t-foreach="state.sessions" t-as="session" t-key="session.id">
+                                        <td class="text-center p-0">
+                                            <div class="status-cell" t-on-click="() => this.openStatusModal(student, session)">
+                                                <t t-set="record" t-value="state.attendance[student.id] and state.attendance[student.id][session.id]"/>
+                                                <t t-if="record">
+                                                    <div class="status-indicator shadow-sm"
+                                                         t-att-class="record.status"
+                                                         t-att-title="record.remark">
+                                                        <i t-if="record.status == 'present'" class="fa fa-check"></i>
+                                                        <i t-if="record.status == 'absent'" class="fa fa-times"></i>
+                                                        <i t-if="record.status == 'excused'" class="fa fa-info"></i>
+                                                        <div t-if="record.remark" class="remark-dot"></div>
+                                                    </div>
+                                                </t>
+                                                <t t-else="">
+                                                    <div class="status-empty"></div>
+                                                </t>
+                                            </div>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modern Modals -->
+            <div t-if="state.showModal" class="dashboard-modal-backdrop" t-on-click="() => this.state.showModal = false">
+                <div class="dashboard-modal animate-pop" t-on-click="(e) => e.stopPropagation()">
+                    <div class="modal-line mb-4"></div>
+                    <h2 class="text-center mb-1">Davomat</h2>
+                    <p class="text-muted text-center mb-5">Holatni tanlang</p>
+                    
+                    <div class="status-grid gap-3">
+                        <button class="status-btn present" t-on-click="() => this.setStatus('present')">
+                            <div class="icon-circle"><i class="fa fa-check"></i></div>
+                            <span class="fw-700">Keldi</span>
+                        </button>
+                        <button class="status-btn absent" t-on-click="() => this.setStatus('absent')">
+                            <div class="icon-circle"><i class="fa fa-times"></i></div>
+                            <span class="fw-700">Kelmadi</span>
+                        </button>
+                        <button class="status-btn excused" t-on-click="() => this.setStatus('excused')">
+                            <div class="icon-circle"><i class="fa fa-info"></i></div>
+                            <span class="fw-700">Sababli</span>
+                        </button>
+                    </div>
+                    
+                    <button class="btn-cancel mt-5" t-on-click="() => this.state.showModal = false">Yopish</button>
+                </div>
+            </div>
+
+            <div t-if="state.showReasonModal" class="dashboard-modal-backdrop">
+                <div class="dashboard-modal animate-pop" style="width: 500px;">
+                    <h3 class="mb-4 fw-800">Sababni ko'rsatish</h3>
+                    <div class="remark-input-container mb-4">
+                        <label class="small fw-700 text-muted ms-1 mb-2">NEGA KELMAGANI HAQIDA MA'LUMOT:</label>
+                        <textarea class="form-control premium-input shadow-none" rows="5" 
+                                  t-on-input="(ev) => state.activeRemark = ev.target.value"
+                                  t-att-value="state.activeRemark"
+                                  placeholder="Iltimos, darsda nima sababdan yo'qligini batafsilroq tasvirlab bering..."></textarea>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <button class="btn-glass flex-grow-1" t-on-click="() => this.state.showReasonModal = false">Bekor qilish</button>
+                        <button class="btn-save flex-grow-1" t-on-click="() => this.saveAttendance(state.activeRemark)">Saqlash</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

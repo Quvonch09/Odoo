@@ -1,88 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="view_sfera_calendar_calendar" model="ir.ui.view">
-        <field name="name">sfera.calendar.calendar</field>
+    <!-- Pivot View -->
+    <record id="view_sfera_calendar_pivot" model="ir.ui.view">
+        <field name="name">sfera.calendar.pivot</field>
         <field name="model">sfera.calendar</field>
         <field name="arch" type="xml">
-            <calendar string="Lesson Calendar" date_start="start_datetime" date_stop="end_datetime" color="batch_id" quick_create="0">
-                <field name="batch_id"/>
-                <field name="lesson_id"/>
-                <field name="faculty_id"/>
-            </calendar>
+            <pivot string="Sessions">
+                <field name="start_datetime" type="row"/>
+                <field name="batch_id" type="row"/>
+                <field name="lesson_id" type="measure"/>
+            </pivot>
         </field>
     </record>
 
+    <!-- Tree View -->
     <record id="view_sfera_calendar_tree" model="ir.ui.view">
         <field name="name">sfera.calendar.list</field>
         <field name="model">sfera.calendar</field>
         <field name="arch" type="xml">
-            <list string="Lesson Sessions">
+            <list string="Sessions">
                 <field name="start_datetime"/>
-                <field name="end_datetime"/>
                 <field name="batch_id"/>
+                <field name="course_id"/>
                 <field name="lesson_id"/>
                 <field name="faculty_id"/>
-                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'done'"/>
+                <field name="state"/>
             </list>
         </field>
     </record>
 
-    <record id="view_sfera_calendar_form" model="ir.ui.view">
-        <field name="name">sfera.calendar.form</field>
+    <!-- Calendar View -->
+    <record id="view_sfera_calendar_calendar" model="ir.ui.view">
+        <field name="name">sfera.calendar.calendar</field>
         <field name="model">sfera.calendar</field>
         <field name="arch" type="xml">
-            <form string="Lesson Session">
-                <header>
-                    <button name="action_confirm" string="Confirm" type="object" invisible="state != 'draft'" class="oe_highlight"/>
-                    <button name="action_done" string="Done" type="object" invisible="state != 'confirm'"/>
-                    <button name="action_view_attendance" string="Attendance" type="object" class="oe_highlight"/>
-                    <button name="action_draft" string="Set to Draft" type="object" invisible="state != 'cancel'"/>
-                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('done', 'cancel')"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
-                </header>
-                <sheet>
-                    <div class="oe_title">
-                        <h1><field name="name" readonly="1"/></h1>
-                    </div>
-                    <group>
-                        <group>
-                            <field name="batch_id"/>
-                            <field name="course_id"/>
-                            <field name="lesson_id" domain="[('course_id', '=', course_id)]"/>
-                            <field name="faculty_id"/>
-                        </group>
-                        <group>
-                            <field name="start_datetime"/>
-                            <field name="end_datetime"/>
-                            <field name="classroom_id"/>
-                        </group>
-                    </group>
-                </sheet>
-                <chatter/>
-            </form>
+            <calendar string="Sessions" date_start="start_datetime" date_stop="end_datetime" color="faculty_id">
+                <field name="batch_id"/>
+                <field name="lesson_id"/>
+            </calendar>
         </field>
     </record>
 
-    <record id="act_open_sfera_calendar_view" model="ir.actions.act_window">
-        <field name="name">Dars Jadvali (Sfera)</field>
-        <field name="type">ir.actions.act_window</field>
+    <!-- Action -->
+    <record id="action_sfera_calendar" model="ir.actions.act_window">
+        <field name="name">Sfera Calendar</field>
         <field name="res_model">sfera.calendar</field>
-        <field name="view_mode">calendar,list,form</field>
+        <field name="view_mode">calendar,list,pivot</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Yangi dars jadvali yaratish
+                Hali hech qanday dars sessiyalari yo'q.
             </p>
         </field>
     </record>
 
-    <menuitem id="menu_sfera_calendar_root"
-              name="Sfera Calendar"
-              parent="openeducat_core.menu_op_school_root"
-              sequence="25"/>
-
-    <menuitem id="menu_sfera_calendar_sub"
-              name="Dars Jadvali"
-              parent="menu_sfera_calendar_root"
-              action="act_open_sfera_calendar_view"
-              sequence="10"/>
+    <!-- Menuitem top-level in SIS next to Configuration -->
+    <menuitem id="menu_sfera_calendar" 
+              name="Sfera Calendar" 
+              parent="openeducat_core.menu_op_school_root" 
+              action="action_sfera_calendar" 
+              sequence="45"/>
 </odoo>
