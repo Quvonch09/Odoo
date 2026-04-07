@@ -62,7 +62,9 @@ class MoizvonkiCall(models.Model):
             f"Davomiyligi: {duration_text}<br/>"
         )
         if res.recording_url:
-            message += f"Suhbat yozuvi: <a href='{res.recording_url}' target='_blank'>Eshitish</a>"
+            message += f"<br/><audio controls src='{res.recording_url}' style='width:100%; height:30px;'></audio>"
+        else:
+            message += "<br/><i>Ovoz yozuvi mavjud emas (yoki hali yuklanmagan)</i>"
 
         if res.lead_id:
             res.lead_id.message_post(body=message)
@@ -119,15 +121,22 @@ class MoizvonkiCall(models.Model):
                 calls = response.json().get('results', [])
                 for call in calls:
                     # Check if call already exists
-                    existing = self.search([('name', '=', str(call.get('id')))], limit=1)
+                    call_id = str(call.get('id') or call.get('id_call'))
+                    existing = self.search([('name', '=', call_id)], limit=1)
                     if not existing:
+                        # Find the correct recording URL (can be 'link' or 'recording_url')
+                        rec_url = call.get('recording_url') or call.get('link')
+                        
+                        # Better direction mapping
+                        direction = 'in' if str(call.get('direction')) in ('0', 'incoming') else 'out'
+                        
                         self.create({
-                            'name': str(call.get('id')),
-                            'phone': call.get('phone'),
-                            'direction': 'in' if call.get('direction') == 'incoming' else 'out',
-                            'status': 'answered' if call.get('is_answered') else 'missed',
-                            'duration': call.get('duration'),
-                            'recording_url': call.get('recording_url'),
+                            'name': call_id,
+                            'phone': call.get('phone') or call.get('from_number') or call.get('to_number'),
+                            'direction': direction,
+                            'status': 'answered' if call.get('is_answered') or str(call.get('status')) == 'answered' else 'missed',
+                            'duration': int(call.get('duration') or 0),
+                            'recording_url': rec_url,
                             'start_time': call.get('start_time'),
                         })
         except Exception as e:
