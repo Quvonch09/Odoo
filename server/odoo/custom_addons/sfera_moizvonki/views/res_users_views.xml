@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_moizvonki_employee_list" model="ir.ui.view">
+        <field name="name">moizvonki.employee.list</field>
+        <field name="model">moizvonki.employee</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="user_id"/>
+                <field name="moizvonki_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_moizvonki_employee" model="ir.actions.act_window">
+        <field name="name">Employees</field>
+        <field name="res_model">moizvonki.employee</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_moizvonki_employee"
+              name="Employees"
+              parent="crm.crm_menu_root"
+              action="action_moizvonki_employee"
+              sequence="100"/>
+</odoo>

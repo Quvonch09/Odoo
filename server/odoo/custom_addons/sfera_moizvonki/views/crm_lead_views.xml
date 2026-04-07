@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_lead_view_form_moizvonki" model="ir.ui.view">
+        <field name="name">crm.lead.form.moizvonki</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="sfera_admission_custom.crm_lead_view_form_sfera_restored"/>
+        <field name="arch" type="xml">
+            <!-- Simple and clean buttons next to phone fields -->
+            <xpath expr="//field[@name='student_phone']" position="after">
+                <button name="%(sfera_moizvonki.moizvonki_call_action_start)d" type="action" 
+                        string="Call with Moi Zvonki" class="btn-sm btn-link text-primary p-0 ms-2" icon="fa-phone"
+                        invisible="not student_phone" help="Moi Zvonki orqali qo'ng'iroq"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='parent_phone']" position="after">
+                <button name="%(sfera_moizvonki.moizvonki_call_action_start)d" type="action" 
+                        string="Call with Moi Zvonki" class="btn-sm btn-link text-primary p-0 ms-2" icon="fa-phone"
+                        invisible="not parent_phone" help="Moi Zvonki orqali qo'ng'iroq"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Server Action to bridge the call -->
+    <record id="moizvonki_call_action_start" model="ir.actions.server">
+        <field name="name">Moi Zvonki: Start Call</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="binding_model_id" ref="crm.model_crm_lead"/>
+        <field name="state">code</field>
+        <field name="code">
+phone = record.student_phone or record.parent_phone
+if phone:
+    action = env['moizvonki.call'].action_make_call(phone)
+    if action:
+        record.message_post(body=f"Moi Zvonki orqali {phone} raqamiga qo'ng'iroq boshlandi.")
+        </field>
+    </record>
+</odoo>
