@@ -5,19 +5,22 @@
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="sfera_admission_custom.crm_lead_view_form_sfera_restored"/>
         <field name="arch" type="xml">
-            <!-- Tugmani lidning yuqori qismiga (Header) joylashtiramiz -->
-            <xpath expr="//header" position="inside">
+            <!-- 
+                Tugmani "Guruhga qo'shish" tugmasining yoniga joylashtiramiz. 
+                Bu usul headerda aniq ko'rinishini ta'minlaydi.
+            -->
+            <xpath expr="//button[@name='%(sfera_admission_custom.action_crm_lead_to_student_wizard)d']" position="before">
                 <button name="%(sfera_moizvonki.moizvonki_call_action_start)d" type="action" 
-                        string="Moi Zvonki: QO'NG'IROQ" class="btn-primary" 
-                        invisible="not student_phone and not parent_phone" 
-                        confirm="Haqiqatan ham ushbu raqamga qo'ng'iroq qilmoqchimisiz?"/>
+                        string="QO'NG'IROQ (Moi Zvonki)" class="btn-primary" 
+                        invisible="not student_phone and not parent_phone"
+                        confirm="Haqiqatan ham telefon qilmoqchimisiz?"/>
             </xpath>
             
-            <!-- Shuningdek telefon maydonlari yonida belgini ham qoldiramiz -->
+            <!-- Telefon raqam widgeti yoniga faqat kichik belgi qo'shamiz -->
             <xpath expr="//field[@name='student_phone']" position="after">
                 <button name="%(sfera_moizvonki.moizvonki_call_action_start)d" type="action" 
-                        string="" class="btn-sm btn-link text-primary p-0 ms-2" icon="fa-phone"
-                        invisible="not student_phone" help="Moi Zvonki orqali qo'ng'iroq"/>
+                        string="" class="btn-sm btn-link text-primary p-0 ms-1" icon="fa-phone"
+                        invisible="not student_phone"/>
             </xpath>
         </field>
     </record>
@@ -32,7 +35,7 @@ phone = record.student_phone or record.parent_phone
 if phone:
     action = env['moizvonki.call'].action_make_call(phone)
     if action:
-        record.message_post(body=f"Moi Zvonki orqali {phone} raqamiga qo'ng'iroq boshlandi.")
+        record.message_post(body=f"Moi Zvonki orqali {phone} raqamiga qo'ng'iroq buyrug'i yuborildi.")
         </field>
     </record>
 </odoo>
