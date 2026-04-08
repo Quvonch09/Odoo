@@ -69,7 +69,7 @@ class MoizvonkiCall(models.Model):
             message += "<br/><i>Ovoz yozuvi mavjud emas (yoki hali yuklanmagan)</i>"
 
         if res.lead_id:
-            res.lead_id.message_post(body=message)
+            res.lead_id.sudo().message_post(body=message)
             # Create completed activity
             self.env['mail.activity'].sudo().create({
                 'res_id': res.lead_id.id,
@@ -82,7 +82,7 @@ class MoizvonkiCall(models.Model):
             }).action_done()
 
         if res.partner_id:
-            res.partner_id.message_post(body=message)
+            res.partner_id.sudo().message_post(body=message)
             # Create completed activity
             self.env['mail.activity'].sudo().create({
                 'res_id': res.partner_id.id,
