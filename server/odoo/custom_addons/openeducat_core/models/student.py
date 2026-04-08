@@ -129,6 +129,17 @@ class OpStudent(models.Model):
             'template': '/openeducat_core/static/xls/op_student.xls'
         }]
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if not vals.get('name'):
+                fname = vals.get('first_name') or ""
+                mname = vals.get('middle_name') or ""
+                lname = vals.get('last_name') or ""
+                full_name = " ".join(filter(None, [fname, mname, lname]))
+                vals['name'] = full_name or _("New Student")
+        return super(OpStudent, self).create(vals_list)
+
     def create_student_user(self):
         user_group = self.env.ref("base.group_portal") or False
         users_res = self.env['res.users']

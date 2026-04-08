@@ -33,20 +33,22 @@ class MoizvonkiCall(models.Model):
 
     @api.model
     def create(self, vals):
-        # Clean phone number (keep only digits)
+        # Robust phone matching (last 9 digits for Uzbekistan)
         phone = vals.get('phone')
         if phone:
             phone_clean = ''.join(filter(str.isdigit, phone))
-            
-            # Try to find partner
-            partner = self.env['res.partner'].search(['|', ('phone', 'ilike', phone_clean), ('mobile', 'ilike', phone_clean)], limit=1)
-            if partner:
-                vals['partner_id'] = partner.id
-            
-            # Try to find lead
-            lead = self.env['crm.lead'].search(['|', ('phone', 'ilike', phone_clean), ('mobile', 'ilike', phone_clean)], limit=1)
-            if lead:
-                vals['lead_id'] = lead.id
+            if len(phone_clean) >= 9:
+                phone_match = '%' + phone_clean[-9:]
+                
+                # Search partner
+                partner = self.env['res.partner'].search(['|', ('phone', 'ilike', phone_match), ('mobile', 'ilike', phone_match)], limit=1)
+                if partner:
+                    vals['partner_id'] = partner.id
+                
+                # Search lead
+                lead = self.env['crm.lead'].search(['|', ('student_phone', 'ilike', phone_match), ('parent_phone', 'ilike', phone_match), ('phone', 'ilike', phone_match)], limit=1)
+                if lead:
+                    vals['lead_id'] = lead.id
 
         res = super(MoizvonkiCall, self).create(vals)
         
@@ -104,8 +106,8 @@ class MoizvonkiCall(models.Model):
         if not api_key or not api_address or not user_name:
             return
 
-        # Fetch last 24 hours of calls (using timestamp)
-        from_date = int((datetime.now() - timedelta(days=1)).timestamp())
+        # Fetch last 3 days of calls to ensure nothing is missed
+        from_date = int((datetime.now() - timedelta(days=3)).timestamp())
         
         url = f"https://{api_address}/api/v1"
         data = {
@@ -116,29 +118,47 @@ class MoizvonkiCall(models.Model):
         }
         
         try:
-            response = requests.post(url, json=data, timeout=10)
+            _logger.info("Moi Zvonki Sync: Starting sync with from_date %s", from_date)
+            response = requests.post(url, json=data, timeout=30)
+            
+            # Log the raw response for debugging
+            _logger.info("Moi Zvonki Sync: HTTP %s | Body: %s", response.status_code, response.text)
+            
             if response.status_code == 200:
-                calls = response.json().get('results', [])
+                res_json = response.json()
+                calls = res_json.get('results', [])
+                if not calls and isinstance(res_json, list):
+                    calls = res_json  # Some API versions return a straight list
+                
+                _logger.info("Moi Zvonki Sync: Found %s calls to process", len(calls))
+                
                 for call in calls:
-                    # Check if call already exists
-                    call_id = str(call.get('id') or call.get('id_call'))
+                    call_id = str(call.get('id') or call.get('id_call') or call.get('uid'))
+                    if not call_id: continue
+                    
                     existing = self.search([('name', '=', call_id)], limit=1)
                     if not existing:
-                        # Find the correct recording URL (can be 'link' or 'recording_url')
-                        rec_url = call.get('recording_url') or call.get('link')
+                        _logger.info("Moi Zvonki Sync: Creating record for call %s", call_id)
                         
-                        # Better direction mapping
-                        direction = 'in' if str(call.get('direction')) in ('0', 'incoming') else 'out'
+                        # Mapping fields based on common Moi Zvonki API names
+                        rec_url = call.get('recording') or call.get('link') or call.get('recording_url')
+                        direction_val = str(call.get('direction', ''))
+                        direction = 'in' if direction_val in ('0', 'incoming', 'inbound') else 'out'
+                        
+                        status_val = str(call.get('status', '')).lower()
+                        is_answered = call.get('is_answered') or status_val in ('answered', 'success', '1')
                         
                         self.create({
                             'name': call_id,
-                            'phone': call.get('phone') or call.get('from_number') or call.get('to_number'),
+                            'phone': call.get('phone') or call.get('from_number') or call.get('to_number') or call.get('src') or call.get('dst'),
                             'direction': direction,
-                            'status': 'answered' if call.get('is_answered') or str(call.get('status')) == 'answered' else 'missed',
+                            'status': 'answered' if is_answered else 'missed',
                             'duration': int(call.get('duration') or 0),
                             'recording_url': rec_url,
-                            'start_time': call.get('start_time'),
+                            'start_time': call.get('start_time') or datetime.now(),
                         })
+            else:
+                _logger.error("Moi Zvonki Sync: API error %s: %s", response.status_code, response.text)
         except Exception as e:
             _logger.error("Error fetching Moi Zvonki calls: %s", str(e))
 
