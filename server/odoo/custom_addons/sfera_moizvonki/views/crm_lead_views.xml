@@ -8,13 +8,13 @@
             <!-- Simple and clean buttons next to phone fields -->
             <xpath expr="//field[@name='student_phone']" position="after">
                 <button name="%(sfera_moizvonki.moizvonki_call_action_start)d" type="action" 
-                        string="Call with Moi Zvonki" class="btn-sm btn-link text-primary p-0 ms-2" icon="fa-phone"
+                        string="Call" class="btn-sm btn-link text-primary p-0 ms-2" icon="fa-phone"
                         invisible="not student_phone" help="Moi Zvonki orqali qo'ng'iroq"/>
             </xpath>
             
             <xpath expr="//field[@name='parent_phone']" position="after">
                 <button name="%(sfera_moizvonki.moizvonki_call_action_start)d" type="action" 
-                        string="Call with Moi Zvonki" class="btn-sm btn-link text-primary p-0 ms-2" icon="fa-phone"
+                        string="Call" class="btn-sm btn-link text-primary p-0 ms-2" icon="fa-phone"
                         invisible="not parent_phone" help="Moi Zvonki orqali qo'ng'iroq"/>
             </xpath>
         </field>
@@ -24,14 +24,14 @@
     <record id="moizvonki_call_action_start" model="ir.actions.server">
         <field name="name">Moi Zvonki: Start Call</field>
         <field name="model_id" ref="crm.model_crm_lead"/>
-        <field name="binding_model_id" ref="crm.model_crm_lead"/>
         <field name="state">code</field>
         <field name="code">
 phone = record.student_phone or record.parent_phone
 if phone:
+    # action o'zgaruvchisiga natijani yuklash shart, shunda Odoo xabarnomani chiqaradi
     action = env['moizvonki.call'].action_make_call(phone)
     if action:
-        record.message_post(body=f"Moi Zvonki orqali {phone} raqamiga qo'ng'iroq boshlandi.")
+        record.message_post(body=f"Moi Zvonki orqali {phone} raqamiga qo'ng'iroq buyrug'i yuborildi.")
         </field>
     </record>
 </odoo>
