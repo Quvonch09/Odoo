@@ -7,7 +7,8 @@
     'depends': [
         'openeducat_core', 
         'openeducat_lesson_custom', 
-        'openeducat_attendance'
+        'openeducat_attendance',
+        'mail'
     ],
     'data': [
         'security/ir.model.access.csv',

@@ -74,13 +74,14 @@ class OpBatch(models.Model):
             today = fields.Date.today()
             month, year = today.month, today.year
         
-        # Get sessions for the month
+        # Get sessions (op.session) for the month
         start_date = fields.Date.to_date(f'{year}-{month}-01')
-        import calendar
-        last_day = calendar.monthrange(year, month)[1]
+        import calendar as py_calendar
+        last_day = py_calendar.monthrange(year, month)[1]
         end_date = fields.Date.to_date(f'{year}-{month}-{last_day}')
         
-        sessions = self.env['sfera.calendar'].search([
+        # Search in op.session instead of sfera.calendar
+        sessions = self.env['op.session'].search([
             ('batch_id', '=', batch_id),
             ('start_datetime', '>=', start_date),
             ('start_datetime', '<=', end_date)
@@ -93,18 +94,18 @@ class OpBatch(models.Model):
         ])
         students = student_courses.mapped('student_id')
         
+        # Search attendance lines linked to these sessions
         attendance_lines = self.env['op.attendance.line'].search([
-            ('attendance_id.sfera_calendar_id', 'in', sessions.ids),
+            ('attendance_id.session_id', 'in', sessions.ids),
             ('student_id', 'in', students.ids)
         ])
         
         att_map = {}
         for line in attendance_lines:
             sid = line.student_id.id
-            cid = line.attendance_id.sfera_calendar_id.id
+            cid = line.attendance_id.session_id.id
             if sid not in att_map: att_map[sid] = {}
             
-            # Dashboard Source of Truth: sfera_status or explicit boolean flags if not default
             status = line.sfera_status
             if not status:
                 if line.absent: status = 'absent'
@@ -124,7 +125,7 @@ class OpBatch(models.Model):
                 'id': s.id, 
                 'date': s.start_datetime.strftime('%Y-%m-%d'),
                 'day': s.start_datetime.day,
-                'lesson': s.lesson_id.name or ''
+                'lesson': s.subject_id.name or ''
             } for s in sessions],
             'attendance': att_map,
             'batch_name': batch.name,
@@ -132,10 +133,11 @@ class OpBatch(models.Model):
 
     @api.model
     def set_attendance_status(self, batch_id, student_id, session_id, status, remark=''):
-        session = self.env['sfera.calendar'].browse(session_id)
-        # Find or create attendance sheet with 'sudo' for proper registration checks
+        # session_id here refers to op.session
+        session = self.env['op.session'].browse(session_id)
+        
         sheet = self.env['op.attendance.sheet'].sudo().search([
-            ('sfera_calendar_id', '=', session_id)
+            ('session_id', '=', session_id)
         ], limit=1)
         
         if not sheet:
@@ -151,10 +153,10 @@ class OpBatch(models.Model):
             
             sheet = self.env['op.attendance.sheet'].sudo().create({
                 'register_id': register.id,
-                'sfera_calendar_id': session_id,
+                'session_id': session_id,
                 'attendance_date': session.start_datetime.date(),
                 'faculty_id': session.faculty_id.id,
-                'state': 'start', # Just set state, don't use auto-fill methods
+                'state': 'start',
             })
 
         line = self.env['op.attendance.line'].sudo().search([
@@ -170,10 +172,11 @@ class OpBatch(models.Model):
         if line:
             line.write(vals)
         else:
-            vals.update({
-                'attendance_id': sheet.id,
-                'student_id': student_id,
-            })
-            self.env['op.attendance.line'].sudo().create(vals)
+            if student_id > 0: # 0 check for initialization
+                vals.update({
+                    'attendance_id': sheet.id,
+                    'student_id': student_id,
+                })
+                self.env['op.attendance.line'].sudo().create(vals)
             
         return True

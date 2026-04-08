@@ -1,17 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_op_batch_form_inherit_attendance_sfera" model="ir.ui.view">
-        <field name="name">op.batch.form.inherit.attendance.sfera</field>
+    <record id="view_op_batch_form_inherit_sfera_manual" model="ir.ui.view">
+        <field name="name">op.batch.form.inherit.sfera.manual</field>
         <field name="model">op.batch</field>
         <field name="inherit_id" ref="openeducat_core.view_op_batch_form"/>
         <field name="arch" type="xml">
+            <!-- Header buttons -->
             <xpath expr="//header" position="inside">
+                <button name="generate_timetable_manual" 
+                        string="JADVALNI SHAKLLANTIRISH" 
+                        type="object" 
+                        class="btn-primary" 
+                        icon="fa-calendar-plus-o"
+                        style="font-weight: 800; background: #059669; border: none; padding: 10px 20px;"/>
+                
                 <button name="action_sfera_attendance" 
                         string="DAVOMATNI OLISH" 
                         type="object" 
-                        class="btn-primary" 
+                        class="btn-secondary" 
                         icon="fa-check-square-o"
-                        style="font-weight: 800; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border: none; padding: 10px 20px;"/>
+                        style="font-weight: 800; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border: none; padding: 10px 20px; color: white;"/>
+            </xpath>
+
+            <!-- Main fields after the standard fields -->
+            <xpath expr="//sheet" position="inside">
+                <div class="o_horizontal_separator mb-4" style="border-bottom: 2px solid #e2e8f0; margin-top: 40px; padding-bottom: 10px;">
+                    <h3 style="color: #1e293b; font-weight: 800;">DARS JADVALINI QO'LDA SOZLASH</h3>
+                    <p class="text-muted small">Excel yordamiz darslarni bir marta kiritish uchun quyidagi maydonlarni to'ldiring:</p>
+                </div>
+                
+                <group name="sfera_schedule_config">
+                    <group string="Vaqt va Kunlar">
+                        <field name="sfera_start_time" placeholder="HH:MM (e.g. 09:00)"/>
+                        <field name="sfera_end_time" placeholder="HH:MM (e.g. 11:00)"/>
+                        <field name="sfera_day_type" widget="radio" options="{'horizontal': true}"/>
+                    </group>
+                    <group string="Dars Ma'lumotlari">
+                        <field name="sfera_subject_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="sfera_faculty_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="sfera_classroom_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="sfera_end_date" help="Kurs qachon tugashini tanlang"/>
+                    </group>
+                </group>
+                
+                <div class="alert alert-info mt-3 rounded-3 border-0 shadow-sm" role="alert" style="background: #f8fafc; color: #475569; border-left: 4px solid #6366f1 !important;">
+                    <i class="fa fa-info-circle me-1"></i>
+                    <strong>Diqqat!</strong> "JADVALNI SHAKLLANTIRISH" tugmasini bosganingizda, tizim ushbu guruh uchun bayram bo'lmagan dars kunlarini <strong>avtomatik</strong> hisoblab chiqadi va sessiyalarni yaratadi.
+                </div>
             </xpath>
         </field>
     </record>

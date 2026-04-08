@@ -1,62 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Pivot View -->
-    <record id="view_sfera_calendar_pivot" model="ir.ui.view">
-        <field name="name">sfera.calendar.pivot</field>
-        <field name="model">sfera.calendar</field>
-        <field name="arch" type="xml">
-            <pivot string="Sessions">
-                <field name="start_datetime" type="row"/>
-                <field name="batch_id" type="row"/>
-                <field name="lesson_id" type="measure"/>
-            </pivot>
-        </field>
-    </record>
+    <!-- 
+        Sfera Calendar menyusini endi to'g'ridan to'g'ri OpenEduCat standart sessiyalariga (op.session) yo'naltiramiz.
+        Bu "tushunarsiz" texnik ko'rinishlarni yo'qotadi va tizim bilan to'liq integratsiyani ta'minlaydi.
+    -->
 
-    <!-- Tree View -->
-    <record id="view_sfera_calendar_tree" model="ir.ui.view">
-        <field name="name">sfera.calendar.list</field>
-        <field name="model">sfera.calendar</field>
+    <!-- Sfera uchun maxsus kalendar ko'rinishi (op.session uchun) -->
+    <record id="view_op_session_calendar_sfera" model="ir.ui.view">
+        <field name="name">op.session.calendar.sfera</field>
+        <field name="model">op.session</field>
+        <field name="priority" eval="100"/>
         <field name="arch" type="xml">
-            <list string="Sessions">
-                <field name="start_datetime"/>
+            <calendar string="Sfera Darslari" date_start="start_datetime" date_stop="end_datetime" color="faculty_id" mode="month" quick_create="False">
                 <field name="batch_id"/>
-                <field name="course_id"/>
-                <field name="lesson_id"/>
+                <field name="subject_id"/>
                 <field name="faculty_id"/>
-                <field name="state"/>
-            </list>
-        </field>
-    </record>
-
-    <!-- Calendar View -->
-    <record id="view_sfera_calendar_calendar" model="ir.ui.view">
-        <field name="name">sfera.calendar.calendar</field>
-        <field name="model">sfera.calendar</field>
-        <field name="arch" type="xml">
-            <calendar string="Sessions" date_start="start_datetime" date_stop="end_datetime" color="faculty_id">
-                <field name="batch_id"/>
-                <field name="lesson_id"/>
             </calendar>
         </field>
     </record>
 
-    <!-- Action -->
-    <record id="action_sfera_calendar" model="ir.actions.act_window">
+    <!-- Yangi Action: op.session modelidan foydalanadi -->
+    <record id="action_sfera_calendar_integrated" model="ir.actions.act_window">
         <field name="name">Sfera Calendar</field>
-        <field name="res_model">sfera.calendar</field>
-        <field name="view_mode">calendar,list,pivot</field>
+        <field name="res_model">op.session</field>
+        <field name="view_mode">calendar,list,form,pivot</field>
+        <field name="view_id" ref="view_op_session_calendar_sfera"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Hali hech qanday dars sessiyalari yo'q.
+                Hali hech qanday dars sessiyalari yaratilmagan.
             </p>
+            <p>Guruh (Batch) ichida "Jadvalni shakllantirish" tugmasini bosib sessiyalar yaratishingiz mumkin.</p>
         </field>
     </record>
 
-    <!-- Menuitem top-level in SIS next to Configuration -->
+    <!-- Sfera Calendar menyusi endi standart sessiyalarni ochadi -->
     <menuitem id="menu_sfera_calendar" 
               name="Sfera Calendar" 
               parent="openeducat_core.menu_op_school_root" 
-              action="action_sfera_calendar" 
+              action="action_sfera_calendar_integrated" 
               sequence="45"/>
 </odoo>

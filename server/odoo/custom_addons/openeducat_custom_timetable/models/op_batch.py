@@ -1,95 +1,106 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
-from datetime import timedelta
-import datetime
+from datetime import timedelta, datetime, time
+import pytz
 
 class OpBatch(models.Model):
     _inherit = 'op.batch'
 
-    faculty_id = fields.Many2one('op.faculty', string='Mentor (Faculty)', required=True)
-    # Yangi maydon: Xona (Classroom)
-    classroom_id = fields.Many2one('op.classroom', string='Darsxonasi', required=True)
+    # Sfera Custom Schedule Fields (Manual Input)
+    sfera_start_time = fields.Char(string='Dars boshlanishi (masalan, 09:00)', default='09:00', help="Format: HH:MM")
+    sfera_end_time = fields.Char(string='Dars tugashi (masalan, 11:00)', default='11:00', help="Format: HH:MM")
     
-    start_time = fields.Float(string='Dars boshlanishi', required=True, default=9.0)
-    end_time = fields.Float(string='Dars tugashi', required=True, default=11.0)
+    sfera_day_type = fields.Selection([
+        ('TOQ_KUNLAR', 'Toq kunlar (Du-Chor-Ju)'),
+        ('JUFT_KUNLAR', 'Juft kunlar (Se-Pay-Sha)'),
+        ('HAR_KUNI', 'Har kuni')
+    ], string='Dars kunlari', default='TOQ_KUNLAR')
     
-    day_type = fields.Selection([
-        ('odd', 'Toq kunlar (Dush-Chor-Jum)'),
-        ('even', 'Juft kunlar (Sesh-Pay-Shan)'),
-        ('daily', 'Har kuni')
-    ], string='Dars kunlari', required=True, default='odd')
-    
-    course_end_date = fields.Date(string='Kurs tugash sanasi', required=True)
+    sfera_faculty_id = fields.Many2one('op.faculty', string='Mentor (O\'qituvchi)')
+    sfera_classroom_id = fields.Many2one('op.classroom', string='Xona (Room)')
+    sfera_subject_id = fields.Many2one('op.subject', string='Fan (Subject)')
+    sfera_end_date = fields.Date(string='Kurs tugash sanasi')
 
-    def generate_timetable_button(self):
-        model_name = 'sfera.calendar'
-        timetable_obj = self.env[model_name]
+    def generate_timetable_manual(self):
+        """
+        Guruh uchun dars jadvalini qo'lda kiritilgan malumotlar asosida shakllantirish.
+        Endi standart op.session modelidan foydalanadi.
+        """
+        self.ensure_one()
+        session_obj = self.env['op.session']
         
+        # Tekshiruvlar
+        if not self.sfera_start_time or not self.sfera_end_time:
+            raise UserError("Boshlanish va tugash vaqtlarini kiriting!")
+        if not self.sfera_end_date:
+            raise UserError("Kurs tugash sanasini kiriting!")
+        if not self.start_date:
+            raise UserError("Guruh boshlanish sanasini kiriting!")
+        
+        # Subjectid tekshirish
+        subject_id = self.sfera_subject_id.id
+        if not subject_id:
+            # Agar tanlanmagan bo'lsa, kursdagi birinchi fanni olishga urinish
+            if self.course_id.subject_ids:
+                subject_id = self.course_id.subject_ids[0].id
+            else:
+                raise UserError("Iltimos, fanni (Subject) tanlang yoki kursga fanlarni biriktiring.")
+
+        try:
+            h1, m1 = map(int, self.sfera_start_time.split(':'))
+            h2, m2 = map(int, self.sfera_end_time.split(':'))
+        except:
+            raise UserError("Vaqt formati noto'g'ri! Iltimos, HH:MM formatida kiriting (masalan: 09:00)")
+
         days_lookup = {
-            'odd': [0, 2, 4],
-            'even': [1, 3, 5],
-            'daily': [0, 1, 2, 3, 4, 5]
+            'TOQ_KUNLAR': [0, 2, 4], # Mon, Wed, Fri
+            'JUFT_KUNLAR': [1, 3, 5], # Tue, Thu, Sat
+            'HAR_KUNI': [0, 1, 2, 3, 4, 5] # Mon-Sat
         }
         
-        selected_days = days_lookup.get(self.day_type)
+        selected_days = days_lookup.get(self.sfera_day_type)
         current_date = self.start_date
         
-        if not current_date or not self.course_end_date:
-            raise UserError("Sanalarni to'ldiring!")
-
-        # Kurs darslarini sequence bo'yicha olish
-        lessons = self.env['op.lesson'].search([
-            ('course_id', '=', self.course_id.id)
-        ], order='sequence, id')
+        # O'zbekiston vaqti (UTC+5)
+        # Odoo serverda UTC saqlaydi
         
-        lesson_index = 0
-        total_lessons = len(lessons)
-
-        # Bayram kunlarini olish
         holiday_dates = self.env['public.holiday'].search([]).mapped('date')
         
-        while current_date <= self.course_end_date:
-            # Dars kuni bo'lsa VA bayram bo'lmasa
+        created_count = 0
+        while current_date <= self.sfera_end_date:
             if current_date.weekday() in selected_days and current_date not in holiday_dates:
-                # Agar darslar tugagan bo'lsa to'xtash
-                if lesson_index >= total_lessons:
-                    break
-                    
-                # O'zbekiston vaqti UTC+5
-                start_dt = datetime.datetime.combine(current_date, datetime.time()) + timedelta(hours=self.start_time - 5)
-                end_dt = datetime.datetime.combine(current_date, datetime.time()) + timedelta(hours=self.end_time - 5)
                 
-                # Mavjud darsni tekshirish
-                existing_session = timetable_obj.search([
+                start_dt = datetime.combine(current_date, time(h1, m1)) - timedelta(hours=5)
+                end_dt = datetime.combine(current_date, time(h2, m2)) - timedelta(hours=5)
+
+                # Mavjud op.session ni tekshirish
+                existing_session = session_obj.search([
                     ('batch_id', '=', self.id),
                     ('start_datetime', '=', start_dt)
                 ], limit=1)
                 
                 if not existing_session:
-                    # Keyingi darsni tanlash
-                    lesson = lessons[lesson_index] if lesson_index < total_lessons else False
-                    
-                    timetable_obj.create({
+                    session_obj.create({
                         'batch_id': self.id,
                         'course_id': self.course_id.id,
-                        'lesson_id': lesson.id if lesson else False,
-                        'faculty_id': self.faculty_id.id,
-                        'classroom_id': self.classroom_id.id,
+                        'subject_id': subject_id,
+                        'faculty_id': self.sfera_faculty_id.id or (self.faculty_id.id if 'faculty_id' in self._fields else False),
+                        'classroom_id': self.sfera_classroom_id.id or (self.classroom_id.id if 'classroom_id' in self._fields else False),
                         'start_datetime': start_dt,
                         'end_datetime': end_dt,
                         'state': 'draft',
                     })
-                    # Lesson indexni oshirish
-                    if lesson:
-                        lesson_index += 1
+                    created_count += 1
             
             current_date += timedelta(days=1)
         
+        if created_count == 0:
+            raise UserError("Ushbu sanalar oralig'ida yangi darslar yaratilmadi.")
+
         return {
-            'name': 'Dars jadvali',
-            'type': 'ir.actions.act_window',
-            'res_model': model_name,
-            'view_mode': 'calendar,list,form',
-            'domain': [('batch_id', '=', self.id)],
-            'target': 'current',
+            'effect': {
+                'fadeout': 'slow',
+                'message': f'Muvaffaqiyatli! {created_count} ta standart sessiya yaratildi.',
+                'type': 'rainbow_man',
+            }
         }
