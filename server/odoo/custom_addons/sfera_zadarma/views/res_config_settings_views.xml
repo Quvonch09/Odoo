@@ -1,0 +1,52 @@
+<odoo>
+    <record id="res_config_settings_view_form_zadarma" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.sfera.zadarma</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="30"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Zadarma" string="Zadarma" name="sfera_zadarma">
+                    <block title="Zadarma IP Telephony" name="zadarma_setting_container">
+                        <setting string="API Credentials" help="Configure Zadarma API credentials for click-to-call and webhooks.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="zadarma_api_key" class="col-lg-3 o_light_label"/>
+                                    <field name="zadarma_api_key"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="zadarma_secret_key" class="col-lg-3 o_light_label"/>
+                                    <field name="zadarma_secret_key" password="True"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="zadarma_webhook_url" class="col-lg-3 o_light_label"/>
+                                    <field name="zadarma_webhook_url" readonly="1" widget="url"/>
+                                </div>
+                                <div class="mt16">
+                                    <button name="action_zadarma_test_connection" type="object" string="Test Connection" class="btn btn-primary"/>
+                                </div>
+                                <div class="text-muted mt16">
+                                    Add this webhook URL in Zadarma under Settings -> Integrations and API -> PBX call notifications.
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_zadarma_config_settings" model="ir.actions.act_window">
+        <field name="name">Zadarma Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'module': 'sfera_zadarma'}</field>
+    </record>
+
+    <menuitem id="menu_zadarma_settings"
+              name="Zadarma"
+              parent="crm.crm_menu_config"
+              action="action_zadarma_config_settings"
+              sequence="50"/>
+</odoo>

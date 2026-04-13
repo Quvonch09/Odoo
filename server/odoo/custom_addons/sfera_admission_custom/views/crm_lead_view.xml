@@ -23,10 +23,10 @@
             </xpath>
 
             <xpath expr="//h1" position="inside">
-                <div class="o_row d-flex">
-                    <field name="first_name" placeholder="Ism" class="oe_inline fw-bold text-primary" required="1"/>
+                <div class="o_row d-flex align-items-center flex-wrap gap-2">
+                    <field name="first_name" placeholder="Ism" class="oe_inline" required="1"/>
                     <span class="mx-2"> </span>
-                    <field name="last_name" placeholder="Familiya" class="oe_inline fw-bold text-primary"/>
+                    <field name="last_name" placeholder="Familiya" class="oe_inline"/>
                 </div>
             </xpath>
 

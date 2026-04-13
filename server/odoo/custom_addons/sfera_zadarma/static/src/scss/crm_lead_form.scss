@@ -1,0 +1,99 @@
+.o_form_view .sfera_lead_title {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.o_form_view .sfera_lead_title_names {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 18px;
+    width: 100%;
+}
+
+.o_form_view .sfera_lead_title_item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.o_form_view .sfera_lead_inline_label,
+.o_form_view .sfera_lead_card .o_form_label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #24364b !important;
+    opacity: 1 !important;
+}
+
+.o_form_view .sfera_lead_card {
+    padding: 18px 20px;
+    height: 100%;
+    border: 1px solid #d7dee7;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 4px 18px rgba(15, 35, 55, 0.06);
+}
+
+.o_form_view .sfera_lead_grid {
+    margin-top: 18px;
+}
+
+.o_form_view .sfera_lead_title_field,
+.o_form_view .sfera_lead_card .o_input,
+.o_form_view .sfera_lead_card input,
+.o_form_view .sfera_lead_card textarea,
+.o_form_view .sfera_lead_card .o-autocomplete--input {
+    min-height: 44px;
+    width: 100%;
+    border: 1px solid #bcc9d8;
+    border-radius: 10px;
+    background: #fff;
+    color: #1f2d3d !important;
+    font-size: 15px;
+}
+
+.o_form_view .sfera_lead_title_field .o_input,
+.o_form_view .sfera_lead_title_field input,
+.o_form_view .sfera_lead_card .o_input,
+.o_form_view .sfera_lead_card input,
+.o_form_view .sfera_lead_card textarea,
+.o_form_view .sfera_lead_card .o-autocomplete--input {
+    padding: 10px 12px;
+}
+
+.o_form_view .sfera_lead_title_field .o_input,
+.o_form_view .sfera_lead_title_field input {
+    min-height: 48px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.o_form_view .sfera_lead_card .o_field_widget.o_readonly_modifier,
+.o_form_view .sfera_lead_card .o_readonly_modifier .o_field_phone,
+.o_form_view .sfera_lead_card .o_readonly_modifier .o_field_char,
+.o_form_view .sfera_lead_card .o_readonly_modifier span {
+    font-size: 15px;
+    font-weight: 500;
+    color: #1f2d3d !important;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.o_form_view .sfera_lead_card .o_group_col_6,
+.o_form_view .sfera_lead_card .o_group_col_12,
+.o_form_view .sfera_lead_card .o_field_widget,
+.o_form_view .sfera_lead_card .o_input_dropdown,
+.o_form_view .sfera_lead_card .o_wrap_field {
+    width: 100%;
+}
+
+.o_form_view .sfera_lead_card .o_group {
+    margin-bottom: 0;
+}
+
+@media (max-width: 1199px) {
+    .o_form_view .sfera_lead_title_names {
+        grid-template-columns: 1fr;
+    }
+}
