@@ -1,51 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="crm_lead_view_form_inherit_sfera_style" model="ir.ui.view">
-        <field name="name">crm.lead.view.form.inherit.sfera.style</field>
-        <field name="model">crm.lead</field>
-        <field name="active" eval="True"/>
-        <field name="inherit_id" ref="sfera_admission_custom.crm_lead_view_form_sfera_restored"/>
-        <field name="priority" eval="90"/>
-        <field name="arch" type="xml">
-            <xpath expr="//h1/div" position="replace">
-                <div class="sfera_lead_title">
-                    <div class="sfera_lead_title_names">
-                        <div class="sfera_lead_title_item">
-                            <label for="first_name" class="sfera_lead_inline_label">Ism</label>
-                            <field name="first_name" placeholder="Ism" required="1" class="sfera_lead_title_field"/>
-                        </div>
-                        <div class="sfera_lead_title_item">
-                            <label for="last_name" class="sfera_lead_inline_label">Familiya</label>
-                            <field name="last_name" placeholder="Familiya" class="sfera_lead_title_field"/>
-                        </div>
-                    </div>
-                </div>
-            </xpath>
-
-            <xpath expr="//group[group[@name='student_info'] and group[@name='contact_info']]" position="replace">
-                <div class="sfera_lead_grid row g-4">
-                    <div class="col-12 col-xxl-6">
-                        <group name="student_info" string="Talaba ma'lumotlari" col="2" class="sfera_lead_card">
-                            <field name="student_phone" widget="phone" string="Asosiy telefon" placeholder="+998 90 123 45 67"/>
-                            <field name="age" string="Yoshi" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="course_id" string="Kurs" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="admission_id" string="Admission" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="event_id" string="Ochiq dars" options="{'no_create': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="lead_source" string="Manba" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        </group>
-                    </div>
-                    <div class="col-12 col-xxl-6">
-                        <group name="contact_info" string="Aloqa va qo'shimcha ma'lumotlar" col="2" class="sfera_lead_card">
-                            <field name="parent_name" string="Vasiy ismi" placeholder="Ota-ona yoki vasiy F.I.Sh." invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="parent_phone" widget="phone" string="Vasiy telefoni" placeholder="+998 90 123 45 67" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="batch_id" string="Guruh" readonly="1" invisible="not batch_id"/>
-                            <field name="student_id" string="Talaba" readonly="1" invisible="not student_id"/>
-                            <field name="tag_ids" string="Teglar" widget="many2many_tags" options="{'color_field': 'color'}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                            <field name="address" string="Yashash manzili" placeholder="Tuman, mahalla, ko'cha, uy" colspan="2" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        </group>
-                    </div>
-                </div>
-            </xpath>
-        </field>
-    </record>
+    <!-- 
+        Bu fayl o'chirildi va mantiq sfera_admission_custom/views/crm_lead_view.xml ga ko'chirildi.
+        Foydalanuvchi Odoo default UI dizaynini so'raganligi sababli custom stylelar olib tashlandi.
+    -->
 </odoo>

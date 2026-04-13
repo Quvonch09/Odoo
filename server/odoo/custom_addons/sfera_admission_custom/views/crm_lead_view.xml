@@ -18,52 +18,53 @@
                         invisible="type == 'lead' or student_id != False"/>
             </xpath>
             
+            <!-- Ism va familiyani sarlavhaga chiqarish -->
             <xpath expr="//h1/field[@name='name']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-
             <xpath expr="//h1" position="inside">
-                <div class="o_row d-flex align-items-center flex-wrap gap-2">
-                    <field name="first_name" placeholder="Ism" class="oe_inline" required="1"/>
-                    <span class="mx-2"> </span>
-                    <field name="last_name" placeholder="Familiya" class="oe_inline"/>
+                <div class="o_row">
+                    <field name="first_name" placeholder="Ism" required="1"/>
+                    <field name="last_name" placeholder="Familiya"/>
                 </div>
             </xpath>
 
-
-
-            <!-- Hide the standard tag_ids field first -->
-            <xpath expr="//field[@name='tag_ids']" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
+            <!-- Standard CRM fieldlarni yashirish (Default UI uchun) -->
+            <xpath expr="//field[@name='tag_ids']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='team_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
 
             <xpath expr="//group[@name='opportunity_partner']" position="replace">
                 <group>
                     <group string="TALABA MA'LUMOTLARI" name="student_info">
-                        <field name="age" invisible="stage_id.name == 'Yangi Lead' or not stage_id" class="oe_inline"/>
-                        <field name="course_id" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        <field name="admission_id" options="{'no_create': True, 'no_open': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        <field name="event_id" options="{'no_create': True}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        <field name="lead_source" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <field name="age" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
+                        <field name="course_id" options="{'no_create': True, 'no_open': True}" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
+                        <field name="admission_id" options="{'no_create': True, 'no_open': True}" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
+                        <field name="event_id" options="{'no_create': True}" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
+                        <field name="lead_source" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
                         <field name="batch_id" readonly="1" invisible="not batch_id"/>
                         <field name="student_id" readonly="1" invisible="not student_id"/>
                     </group>
                     <group string="ALOQA VA MANZIL" name="contact_info">
-                        <field name="student_phone" widget="phone" string="Asosiy telefon"/>
-                        <field name="parent_name" string="Vasiy ismi" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        <field name="parent_phone" widget="phone" string="Vasiy telefoni" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
-                        <field name="address" string="Yashash manzili" invisible="stage_id.name == 'Yangi Lead' or not stage_id"/>
+                        <label for="student_phone" string="Asosiy telefon"/>
+                        <div class="o_row" name="student_phone_row">
+                            <field name="student_phone" widget="phone" required="1"/>
+                            <!-- Zadarma Call button bu yoqqa tushadi -->
+                        </div>
+                        
+                        <field name="parent_name" string="Vasiy ismi" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
+                        
+                        <label for="parent_phone" string="Vasiy telefoni" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
+                        <div class="o_row" name="parent_phone_row" invisible="not stage_id or stage_id.name == 'Yangi Lead'">
+                            <field name="parent_phone" widget="phone"/>
+                            <!-- Zadarma Call button bu yoqqa tushadi -->
+                        </div>
+                        
+                        <field name="address" string="Yashash manzili" invisible="not stage_id or stage_id.name == 'Yangi Lead'"/>
                     </group>
                 </group>
             </xpath>
-
-            <xpath expr="//field[@name='user_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-            <xpath expr="//field[@name='team_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-            <xpath expr="//field[@name='date_deadline']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-            <xpath expr="//field[@name='priority']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-            <xpath expr="//field[@name='expected_revenue']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-            <xpath expr="//field[@name='probability']" position="attributes"><attribute name="invisible">1</attribute></xpath>
         </field>
     </record>
 
@@ -85,18 +86,15 @@
                 </header>
             </xpath>
 
-            <!-- Kanban ichiga kerakli fieldlarni qo'shib qo'yamiz (declarations) -->
             <xpath expr="//field[@name='won_status']" position="after">
                 <field name="course_id"/>
                 <field name="lead_count_compute"/>
             </xpath>
 
-            <!-- Progressbar'da sonini ko'rsatish -->
             <xpath expr="//progressbar" position="attributes">
                 <attribute name="sum_field">lead_count_compute</attribute>
             </xpath>
 
-            <!-- Cardda kurs nomini ko'k badge ichida ko'rsatamiz -->
             <xpath expr="//t[@t-name='card']/field[@name='name']" position="after">
                 <div t-if="record.course_id" class="mt-1 mb-1">
                     <span class="badge rounded-pill text-bg-primary">
