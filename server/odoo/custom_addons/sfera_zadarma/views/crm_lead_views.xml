@@ -5,23 +5,25 @@
         <field name="inherit_id" ref="sfera_admission_custom.crm_lead_view_form_sfera_restored"/>
         <field name="arch" type="xml">
             <!-- Asosiy telefon yoniga Call tugmasini qo'shish -->
-            <xpath expr="//div[@name='student_phone_row']" position="inside">
+            <xpath expr="//field[@name='student_phone']" position="after">
                 <button name="action_zadarma_call" 
                         string="Call" 
                         type="object" 
                         icon="fa-phone" 
                         class="btn btn-outline-primary btn-sm ms-2"
-                        title="Call student"/>
+                        title="Call student"
+                        invisible="not student_phone"/>
             </xpath>
             
             <!-- Vasiy telefoni yoniga Call tugmasini qo'shish -->
-            <xpath expr="//div[@name='parent_phone_row']" position="inside">
+            <xpath expr="//field[@name='parent_phone']" position="after">
                 <button name="action_zadarma_call_parent" 
                         string="Call" 
                         type="object" 
                         icon="fa-phone" 
                         class="btn btn-outline-primary btn-sm ms-2"
-                        title="Call parent"/>
+                        title="Call parent"
+                        invisible="not parent_phone"/>
             </xpath>
         </field>
     </record>
