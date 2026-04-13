@@ -6,6 +6,7 @@
     <field name="arch" type="xml">
 
         <xpath expr="//group/group[2]" position="inside">
+            <field name="batch_id"/>
             <field name="parent_name"/>
             <field name="parent_phone" widget="phone"/>
         </xpath>
@@ -26,6 +27,17 @@
         <xpath expr="//field[@name='user_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
         <xpath expr="//field[@name='partner_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
 
+    </field>
+</record>
+
+<record id="view_op_student_tree_sfera_custom" model="ir.ui.view">
+    <field name="name">op.student.tree.sfera.custom</field>
+    <field name="model">op.student</field>
+    <field name="inherit_id" ref="openeducat_core.view_op_student_tree"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='name']" position="before">
+            <field name="batch_id" optional="show"/>
+        </xpath>
     </field>
 </record>
 </odoo>

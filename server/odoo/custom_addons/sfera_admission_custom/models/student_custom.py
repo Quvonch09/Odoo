@@ -7,27 +7,77 @@ class OpStudent(models.Model):
 
     parent_name = fields.Char(string="Ota-onasining ismi")
     parent_phone = fields.Char(string="Ota-onasining raqami")
+    batch_id = fields.Many2one('op.batch', string="Guruh")
     comment = fields.Text(string="Izohlar") 
     internal_comment = fields.Text(string="Ichki Izoh")
 
     @api.model_create_multi
     def create(self, vals_list):
         """ 1. Multi-create qo'llab-quvvatlash va vals_list bilan ishlash """
+        for vals in vals_list:
+            # Import paytida name bo'lmasa, familya va ismdan yasab olamiz
+            if (not vals.get('name') or vals.get('name') == '/') and vals.get('first_name'):
+                vals['name'] = f"{vals['first_name']} {vals.get('last_name') or ''}".strip()
+            
+            # Agar hali ham name bo'lmasa (res_partner_check_name xatosini oldini olish)
+            if not vals.get('name'):
+                vals['name'] = "Yangi Talaba"
+
         records = super(OpStudent, self).create(vals_list)
         
         # Har bir yaratilgan record va unga mos vals'ni tekshiramiz
         for rec, vals in zip(records, vals_list):
             if vals.get('internal_comment'):
                 rec._create_task_from_comment(vals['internal_comment'])
+            
+            # Batch berilgan bo'lsa, avtomatik kursga yozish
+            if vals.get('batch_id'):
+                rec._sync_student_course(vals['batch_id'])
+
         return records
 
     def write(self, vals):
         """ 2. Write metodida self (recordset) ichidagi har bir record uchun ishlash """
+        # Agar ism o'zgarsa lekin name kelmasa (first_name/last_name o'zgarganda)
+        if 'first_name' in vals or 'last_name' in vals:
+            for rec in self:
+                fname = vals.get('first_name', rec.first_name)
+                lname = vals.get('last_name', rec.last_name)
+                if not vals.get('name'):
+                    vals['name'] = f"{fname or ''} {lname or ''}".strip()
+
         res = super(OpStudent, self).write(vals)
+        
         if 'internal_comment' in vals:
             for rec in self:
                 rec._create_task_from_comment(vals['internal_comment'])
+        
+        if 'batch_id' in vals:
+            for rec in self:
+                rec._sync_student_course(vals['batch_id'])
+                
         return res
+
+    def _sync_student_course(self, batch_id):
+        """ Talabani guruhga avtomatik biriktirish """
+        self.ensure_one()
+        batch = self.env['op.batch'].browse(batch_id)
+        if not batch:
+            return
+
+        # Tekshiramiz, bu guruhda allaqachon bormi?
+        existing_course = self.env['op.student.course'].search([
+            ('student_id', '=', self.id),
+            ('batch_id', '=', batch.id)
+        ], limit=1)
+
+        if not existing_course:
+            self.env['op.student.course'].create({
+                'student_id': self.id,
+                'batch_id': batch.id,
+                'course_id': batch.course_id.id,
+                'state': 'running',
+            })
 
     def _create_task_from_comment(self, comment):
         """ 3. Activity yaratish mantiqini optimallashtirish """
