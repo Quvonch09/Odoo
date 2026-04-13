@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- 
-        Bu fayl o'chirildi va mantiq sfera_admission_custom/views/crm_lead_view.xml ga ko'chirildi.
-        Foydalanuvchi Odoo default UI dizaynini so'raganligi sababli custom stylelar olib tashlandi.
+        Eski xato berayotgan viewni bazadan o'chirib tashlaymiz yoki bo'shatamiz.
+        Chunki u eski xpathlar bilan yangi strukturaga mos kelmayapti.
     -->
+    <record id="crm_lead_view_form_inherit_sfera_style" model="ir.ui.view">
+        <field name="name">crm.lead.view.form.inherit.sfera.style.empty</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="sfera_admission_custom.crm_lead_view_form_sfera_restored"/>
+        <field name="arch" type="xml">
+            <xpath expr="." position="inside">
+                <!-- Bo'sh joy -->
+            </xpath>
+        </field>
+    </record>
 </odoo>

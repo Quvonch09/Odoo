@@ -3,26 +3,27 @@
         <field name="name">crm.lead.view.form.inherit.sfera.zadarma</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="sfera_admission_custom.crm_lead_view_form_sfera_restored"/>
+        <field name="priority" eval="2"/>
         <field name="arch" type="xml">
-            <!-- Asosiy telefon yoniga Call tugmasini qo'shish -->
-            <xpath expr="//field[@name='student_phone']" position="after">
+            <!-- Asosiy telefon yoniga Call tugmasini joylashtirish -->
+            <xpath expr="//div[@name='student_phone_row']" position="inside">
                 <button name="action_zadarma_call" 
-                        string="Call" 
+                        string="Qo'ng'iroq" 
                         type="object" 
                         icon="fa-phone" 
-                        class="btn btn-outline-primary btn-sm ms-2"
-                        title="Call student"
+                        class="btn btn-outline-success btn-sm ms-3"
+                        title="Zadarma orqali qo'ng'iroq"
                         invisible="not student_phone"/>
             </xpath>
             
-            <!-- Vasiy telefoni yoniga Call tugmasini qo'shish -->
-            <xpath expr="//field[@name='parent_phone']" position="after">
+            <!-- Vasiy telefoni yoniga Call tugmasini joylashtirish -->
+            <xpath expr="//div[@name='parent_phone_row']" position="inside">
                 <button name="action_zadarma_call_parent" 
-                        string="Call" 
+                        string="Qo'ng'iroq" 
                         type="object" 
                         icon="fa-phone" 
-                        class="btn btn-outline-primary btn-sm ms-2"
-                        title="Call parent"
+                        class="btn btn-outline-success btn-sm ms-3"
+                        title="Zadarma orqali qo'ng'iroq"
                         invisible="not parent_phone"/>
             </xpath>
         </field>

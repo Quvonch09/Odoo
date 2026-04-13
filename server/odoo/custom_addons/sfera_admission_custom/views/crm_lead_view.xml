@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="crm.crm_lead_action_pipeline" model="ir.actions.act_window">
-        <field name="view_mode" >form,kanban,list,calendar,pivot,graph,activity</field>
+        <field name="view_mode">form,kanban,list,calendar,pivot,graph,activity</field>
     </record>
 
     <record id="crm_lead_view_form_sfera_restored" model="ir.ui.view">
         <field name="name">crm.lead.form.sfera.restored</field>
         <field name="model">crm.lead</field>
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="priority" eval="1"/>
         <field name="arch" type="xml">
+            <!-- Header buttons -->
             <xpath expr="//header" position="inside">
                 <button name="%(sfera_admission_custom.action_crm_lead_to_student_wizard)d" 
                         string="Guruhga qo'shish" 
@@ -18,42 +20,62 @@
                         invisible="type == 'lead' or student_id != False"/>
             </xpath>
             
-            <!-- Ism va familiyani sarlavhaga chiroyli chiqarish -->
-            <xpath expr="//h1/field[@name='name']" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
-            <xpath expr="//h1" position="after">
-                <div class="o_row">
-                    <field name="first_name" placeholder="Ism" required="1" class="oe_title"/>
-                    <field name="last_name" placeholder="Familiya" class="oe_title"/>
+            <!-- Hide standard clutter -->
+            <xpath expr="//div[@name='button_box']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//field[@name='priority']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//group[@name='lead_priority']" position="attributes"><attribute name="invisible">1</attribute></xpath>
+            <xpath expr="//div[hasclass('oe_title')]" position="replace">
+                <div class="oe_title">
+                    <label for="first_name" string="Talaba ismi"/>
+                    <h1>
+                        <div class="o_row">
+                            <field name="first_name" placeholder="Ism" required="1"/>
+                            <field name="last_name" placeholder="Familiya"/>
+                        </div>
+                    </h1>
                 </div>
             </xpath>
 
-            <!-- Standard CRM fieldlarni yashirish (Default UI uchun) -->
-            <xpath expr="//field[@name='tag_ids']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-            <xpath expr="//field[@name='user_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-            <xpath expr="//field[@name='team_id']" position="attributes"><attribute name="invisible">1</attribute></xpath>
-
+            <!-- Main Content Area Reset -->
             <xpath expr="//group[@name='opportunity_partner']" position="replace">
-                <group name="main_info">
-                    <group string="TALABA MA'LUMOTLARI" name="student_info">
-                        <field name="age" string="Yoshi"/>
-                        <field name="course_id" options="{'no_create': True, 'no_open': True}"/>
-                        <field name="admission_id" options="{'no_create': True, 'no_open': True}"/>
-                        <field name="event_id" options="{'no_create': True}"/>
-                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="lead_source"/>
-                        <field name="batch_id" readonly="1" invisible="not batch_id"/>
-                        <field name="student_id" readonly="1" invisible="not student_id"/>
-                    </group>
-                    <group string="ALOQA VA MANZIL" name="contact_info">
-                        <field name="student_phone" widget="phone" string="Asosiy telefon" required="1"/>
-                        <field name="parent_name" string="Vasiy ismi"/>
-                        <field name="parent_phone" widget="phone" string="Vasiy telefoni"/>
-                        <field name="address" string="Yashash manzili"/>
-                    </group>
-                </group>
+                <div class="row w-100 m-0">
+                    <div class="col-12 col-lg-6 ps-0">
+                        <group string="TALABA MA'LUMOTLARI" name="student_info" class="mt-2">
+                            <field name="age" string="Yoshi"/>
+                            <field name="course_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="admission_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="event_id" options="{'no_create': True}"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="lead_source"/>
+                            <field name="batch_id" readonly="1" invisible="not batch_id"/>
+                            <field name="student_id" readonly="1" invisible="not student_id"/>
+                        </group>
+                    </div>
+                    <div class="col-12 col-lg-6 pe-0">
+                        <group string="ALOQA VA MANZIL" name="contact_info" class="mt-2">
+                            <label for="student_phone" string="Asosiy telefon"/>
+                            <div class="o_row" name="student_phone_row">
+                                <field name="student_phone" widget="phone" required="1"/>
+                                <!-- Button will be injected here -->
+                            </div>
+                            
+                            <field name="parent_name" string="Vasiy ismi"/>
+                            
+                            <label for="parent_phone" string="Vasiy telefoni"/>
+                            <div class="o_row" name="parent_phone_row">
+                                <field name="parent_phone" widget="phone"/>
+                                <!-- Button will be injected here -->
+                            </div>
+                            
+                            <field name="address" string="Yashash manzili"/>
+                        </group>
+                    </div>
+                </div>
             </xpath>
+
+            <!-- Hide remaining right panel clutter -->
+            <xpath expr="//group[field[@name='user_id']]" position="attributes"><attribute name="invisible">1</attribute></xpath>
         </field>
     </record>
 
@@ -65,7 +87,6 @@
             <xpath expr="//kanban" position="attributes">
                 <attribute name="quick_create">false</attribute>
             </xpath>
-
             <xpath expr="//kanban" position="inside">
                 <header>
                     <button name="%(sfera_admission_custom.action_crm_lead_to_student_wizard)d" 
@@ -74,16 +95,13 @@
                             class="btn-primary" />
                 </header>
             </xpath>
-
             <xpath expr="//field[@name='won_status']" position="after">
                 <field name="course_id"/>
                 <field name="lead_count_compute"/>
             </xpath>
-
             <xpath expr="//progressbar" position="attributes">
                 <attribute name="sum_field">lead_count_compute</attribute>
             </xpath>
-
             <xpath expr="//t[@t-name='card']/field[@name='name']" position="after">
                 <div t-if="record.course_id" class="mt-1 mb-1">
                     <span class="badge rounded-pill text-bg-primary">
