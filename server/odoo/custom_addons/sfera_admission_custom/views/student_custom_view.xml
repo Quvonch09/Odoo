@@ -110,7 +110,7 @@
             </div>
 
             <field name="student_ids" nolabel="1" context="{'default_batch_id': id}">
-                <list create="0" delete="0">
+                <list editable="bottom">
                     <field name="first_name" string="Ism"/>
                     <field name="last_name" string="Familiya"/>
                     <field name="age_years" string="Yosh"/>
