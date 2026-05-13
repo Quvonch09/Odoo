@@ -11,6 +11,11 @@
             <field name="parent_phone" widget="phone"/>
         </xpath>
 
+        <xpath expr="//field[@name='birth_date']" position="replace">
+            <field name="age_years"/>
+            <field name="birth_date" invisible="1"/>
+        </xpath>
+
         <xpath expr="//page[@name='other_information']" position="replace">
             <page string="Markaz Izohi" name="markaz_izohi">
                 <group>
@@ -37,6 +42,82 @@
     <field name="arch" type="xml">
         <xpath expr="//field[@name='name']" position="before">
             <field name="batch_id" optional="show"/>
+        </xpath>
+        <xpath expr="//field[@name='birth_date']" position="replace">
+            <field name="age_years" string="Yosh" optional="show"/>
+        </xpath>
+    </field>
+</record>
+
+<record id="view_op_student_kanban_sfera_custom" model="ir.ui.view">
+    <field name="name">op.student.kanban.sfera.custom</field>
+    <field name="model">op.student</field>
+    <field name="inherit_id" ref="openeducat_core.kanban_view_student"/>
+    <field name="arch" type="xml">
+        <xpath expr="//kanban/templates" position="before">
+            <field name="parent_phone"/>
+        </xpath>
+        <xpath expr="//main/div[@class='text-truncate']" position="after">
+            <div class="text-truncate" t-if="record.parent_phone.raw_value">
+                <i class="fa fa-fw me-2 fa-phone text-primary" title="parent phone"/>
+                <span>Ota-ona: </span>
+                <field name="parent_phone" class="text-truncate"/>
+            </div>
+        </xpath>
+    </field>
+</record>
+
+<record id="view_op_student_search_sfera_custom" model="ir.ui.view">
+    <field name="name">op.student.search.sfera.custom</field>
+    <field name="model">op.student</field>
+    <field name="inherit_id" ref="openeducat_core.view_op_student_search"/>
+    <field name="arch" type="xml">
+        <xpath expr="//search/field[@name='name']" position="replace">
+            <field
+                name="name"
+                string="Qidiruv"
+                filter_domain="[
+                    '|', '|', '|', '|', '|', '|', '|',
+                    ('name', 'ilike', self),
+                    ('first_name', 'ilike', self),
+                    ('last_name', 'ilike', self),
+                    ('phone', 'ilike', self),
+                    ('parent_name', 'ilike', self),
+                    ('parent_phone', 'ilike', self),
+                    ('batch_id', 'ilike', self),
+                    ('batch_id.name', 'ilike', self)
+                ]"
+            />
+        </xpath>
+        <xpath expr="//search" position="inside">
+            <field name="parent_name" invisible="1"/>
+            <field name="parent_phone" invisible="1"/>
+            <field name="batch_id" invisible="1"/>
+            <field name="phone" invisible="1"/>
+        </xpath>
+    </field>
+</record>
+
+<record id="view_op_batch_form_students_sfera_custom" model="ir.ui.view">
+    <field name="name">op.batch.form.students.sfera.custom</field>
+    <field name="model">op.batch</field>
+    <field name="inherit_id" ref="openeducat_core.view_op_batch_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//sheet" position="inside">
+            <div class="o_horizontal_separator mt-4 mb-3" style="border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                <h3 style="color: #1e293b; font-weight: 800;">GURUH STUDENTLARI</h3>
+                <p class="text-muted small">Faqat ushbu guruhga biriktirilgan studentlar ro'yxati.</p>
+            </div>
+
+            <field name="student_ids" nolabel="1" context="{'default_batch_id': id}">
+                <list create="0" delete="0">
+                    <field name="first_name" string="Ism"/>
+                    <field name="last_name" string="Familiya"/>
+                    <field name="age_years" string="Yosh"/>
+                    <field name="phone" string="Telefon" widget="phone"/>
+                    <field name="parent_phone" string="Ota-ona telefoni" widget="phone"/>
+                </list>
+            </field>
         </xpath>
     </field>
 </record>

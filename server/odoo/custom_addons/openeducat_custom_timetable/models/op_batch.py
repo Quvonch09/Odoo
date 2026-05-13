@@ -6,6 +6,8 @@ import pytz
 class OpBatch(models.Model):
     _inherit = 'op.batch'
 
+    student_ids = fields.One2many('op.student', 'batch_id', string='Students')
+
     # Sfera Custom Schedule Fields (Manual Input)
     sfera_start_time = fields.Char(string='Dars boshlanishi (masalan, 09:00)', default='09:00', help="Format: HH:MM")
     sfera_end_time = fields.Char(string='Dars tugashi (masalan, 11:00)', default='11:00', help="Format: HH:MM")
