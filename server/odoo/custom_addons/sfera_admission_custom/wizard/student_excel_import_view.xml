@@ -7,7 +7,9 @@
                 <group>
                     <field name="file" filename="file_name"/>
                     <field name="file_name" invisible="1"/>
-                    <label string="Excel ustunlari quyidagicha bo'lishi kerak: Ism-familiya, Yosh, Telefon raqam, Ota-onasining ismi, Ota-onasining telefon raqami, Guruh"/>
+                    <div class="o_form_label">
+                        Excel ustunlari quyidagicha bo'lishi kerak: Ism-familiya, Yosh, Telefon raqam, Ota-onasining ismi, Ota-onasining telefon raqami, Guruh
+                    </div>
                 </group>
                 <footer>
                     <button name="action_import_file" string="Import qilish" type="object" class="btn-primary"/>
