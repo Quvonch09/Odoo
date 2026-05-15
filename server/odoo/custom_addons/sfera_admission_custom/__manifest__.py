@@ -19,6 +19,7 @@
         'security/ir.model.access.csv',
         'data/crm_stage_data.xml',
         'wizard/crm_lead_to_student_view.xml',
+        'wizard/student_excel_import_view.xml',
         'views/admission_view.xml',
         'views/admission_lite_view.xml',
         'views/student_custom_view.xml',

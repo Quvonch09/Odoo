@@ -1,5 +1,10 @@
-from odoo import models, fields, api, _
+import base64
 from datetime import datetime, timedelta
+from io import BytesIO
+
+import xlsxwriter
+
+from odoo import models, fields, api, _
 
 class OpStudent(models.Model):
     _inherit = 'op.student'
@@ -10,6 +15,15 @@ class OpStudent(models.Model):
     batch_id = fields.Many2one('op.batch', string="Guruh")
     comment = fields.Text(string="Izohlar") 
     internal_comment = fields.Text(string="Ichki Izoh")
+
+    EXCEL_HEADERS = [
+        "Ism-familiya",
+        "Yosh",
+        "Telefon raqam",
+        "Ota-onasining ismi",
+        "Ota-onasining telefon raqami",
+        "Guruh",
+    ]
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -111,3 +125,80 @@ class OpStudent(models.Model):
                 'date_deadline': target_date.date(),
                 'user_id': self.env.uid, # Joriy foydalanuvchi
             })
+
+    @api.model
+    def get_import_templates(self):
+        return [{
+            'label': _('Student Excel Shabloni'),
+            'template': '/sfera_admission_custom/static/xls/student_import_template.csv'
+        }]
+
+    def _get_student_excel_records(self):
+        records = self
+        if not records and self.env.context.get('active_ids'):
+            records = self.browse(self.env.context['active_ids'])
+        if not records:
+            records = self.search([])
+        return records
+
+    def _create_student_excel_attachment(self, workbook_name, rows):
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+        worksheet = workbook.add_worksheet('Students')
+
+        header_format = workbook.add_format({
+            'bold': True,
+            'bg_color': '#D9EAF7',
+            'border': 1,
+        })
+        cell_format = workbook.add_format({'border': 1})
+
+        for col, header in enumerate(self.EXCEL_HEADERS):
+            worksheet.write(0, col, header, header_format)
+
+        for row_idx, row in enumerate(rows, start=1):
+            for col_idx, value in enumerate(row):
+                worksheet.write(row_idx, col_idx, value or '', cell_format)
+
+        worksheet.set_column(0, 0, 28)
+        worksheet.set_column(1, 1, 10)
+        worksheet.set_column(2, 4, 24)
+        worksheet.set_column(5, 5, 24)
+        workbook.close()
+        output.seek(0)
+
+        attachment = self.env['ir.attachment'].create({
+            'name': workbook_name,
+            'type': 'binary',
+            'datas': base64.b64encode(output.read()),
+            'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        })
+        return attachment
+
+    def action_export_student_excel(self):
+        records = self._get_student_excel_records()
+        rows = []
+        for record in records:
+            rows.append([
+                record.name,
+                record.age_years,
+                record.phone,
+                record.parent_name,
+                record.parent_phone,
+                record.batch_id.name,
+            ])
+
+        attachment = self._create_student_excel_attachment('students_export.xlsx', rows)
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
+
+    def action_download_student_excel_template(self):
+        attachment = self._create_student_excel_attachment('student_import_template.xlsx', [])
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/web/content/{attachment.id}?download=true',
+            'target': 'self',
+        }
